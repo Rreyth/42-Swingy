@@ -1,4 +1,4 @@
-package Swingy.utils;
+package Swingy.View;
 
 import java.io.FileWriter;
 import java.io.IOException;
