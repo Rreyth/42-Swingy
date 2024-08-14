@@ -24,4 +24,5 @@ public class MapGenerator {
 		}
 		return map;
 	}
+	// When a map is generated, villains of varying power will be spread randomly over the map
 }

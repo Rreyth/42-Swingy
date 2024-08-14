@@ -6,8 +6,6 @@ public class Tile {
 	private boolean occupied;
 	private boolean visited;
 
-	// gen mob before or when player visits tile
-
 	public Tile(int x, int y) {
 		this.x = x;
 		this.y = y;
