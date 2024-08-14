@@ -1,7 +1,7 @@
-package Swingy.Model.entity;
+package swingy.model.entity;
 
-import Swingy.Model.entity.Entity;
-import Swingy.Model.artifact.Artifact;
+import swingy.model.entity.Entity;
+import swingy.model.artifact.Artifact;
 
 public class Villain extends Entity {
 	public Villain(String name, int level, int experience, int attack, int defense, int hitPoints, Artifact weapon, Artifact armor, Artifact helm) {

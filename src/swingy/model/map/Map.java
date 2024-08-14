@@ -1,6 +1,6 @@
-package Swingy.Model.map;
+package swingy.model.map;
 
-import Swingy.Model.map.Tile;
+import swingy.model.map.Tile;
 
 public class Map {
 	private Tile[][] map;

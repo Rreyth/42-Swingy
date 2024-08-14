@@ -1,9 +1,9 @@
-package Swingy.Controller.generators;
+package swingy.controller.generators;
 
-import Swingy.Model.artifact.Artifact;
-import Swingy.Model.artifact.Weapon;
-import Swingy.Model.artifact.Armor;
-import Swingy.Model.artifact.Helm;
+// import Swingy.Model.artifact.Artifact;
+// import Swingy.Model.artifact.Weapon;
+// import Swingy.Model.artifact.Armor;
+// import Swingy.Model.artifact.Helm;
 
 public class ArtifactGenerator {
 	private static ArtifactGenerator instance = null;

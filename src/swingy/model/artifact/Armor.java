@@ -1,6 +1,6 @@
-package Swingy.Model.artifact;
+package swingy.model.artifact;
 
-import Swingy.Model.artifact.Artifact;
+import swingy.model.artifact.Artifact;
 
 public class Armor extends Artifact {
 	public Armor(String name, int defense) {

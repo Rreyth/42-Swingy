@@ -1,4 +1,4 @@
-package Swingy.Model.entity;
+package swingy.model.entity;
 
 import javax.validation.constraints.*;
 

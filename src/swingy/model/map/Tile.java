@@ -1,4 +1,4 @@
-package Swingy.Model.map;
+package swingy.model.map;
 
 public class Tile {
 	private int x;

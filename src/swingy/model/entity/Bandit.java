@@ -1,6 +1,6 @@
-package Swingy.Model.entity;
+package swingy.model.entity;
 
-import Swingy.Model.entity.Villain;
+import swingy.model.entity.Villain;
 
 public class Bandit extends Villain {  //not usefull ? contains stats ? better drop rate for certain types artifact?
 

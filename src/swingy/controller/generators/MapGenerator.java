@@ -1,7 +1,7 @@
-package Swingy.Controller.generators;
+package swingy.controller.generators;
 
-import Swingy.Model.map.Map;
-import Swingy.Model.map.Tile;
+// import Swingy.Model.map.Map;
+// import Swingy.Model.map.Tile;
 
 public class MapGenerator {
 	private static MapGenerator instance = null;

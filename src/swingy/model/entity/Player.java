@@ -1,7 +1,7 @@
-package Swingy.Model.entity;
+package swingy.model.entity;
 
-import Swingy.Model.entity.Entity;
-import Swingy.Model.artifact.Artifact;
+import swingy.model.entity.Entity;
+import swingy.model.artifact.Artifact;
 import javax.validation.constraints.*;
 
 public class Player extends Entity { //add builder pattern

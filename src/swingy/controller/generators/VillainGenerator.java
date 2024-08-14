@@ -1,7 +1,7 @@
-package Swingy.Controller.generators;
+package swingy.controller.generators;
 
-import Swingy.Model.entity.Villain;
-import Swingy.Model.entity.Bandit;
+// import Swingy.Model.entity.Villain;
+// import Swingy.Model.entity.Bandit;
 
 public class VillainGenerator {
 	private static VillainGenerator instance = null;
