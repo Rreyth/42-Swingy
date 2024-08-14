@@ -1,6 +1,7 @@
 package swingy.model.entity;
 
 import javax.validation.constraints.*;
+import swingy.model.artifact.Artifact;
 
 public class Entity {
 

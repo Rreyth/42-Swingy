@@ -6,12 +6,10 @@ import swingy.controller.GameController;
 
 public class GameLauncher {
 	public static void main(String[] args) {
-		System.out.println("Hello World!");
-	}
+		GameModel model = new GameModel();
+		GameView view = new GameView();
+		GameController controller = new GameController(model, view);
+		controller.startGame();
 
-	//class GameView
-	//class GameModel
-	//class GameController
-	
-	//game loop in controller
+	}
 }
