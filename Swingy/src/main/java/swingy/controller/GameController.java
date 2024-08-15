@@ -45,28 +45,50 @@ public class GameController {
 	}
 
 	public void gameLoop() {
-		String[] inputs;
+		String input;
 		while (isRunning) { // while player is alive or quit
-			inputs = view.getInputs();
-			inputHandler(Arrays.toString(inputs));
+			input = view.getInput();
+			inputHandler(input);
 			//check player pos for encounter -> ded -> isRunning = false -> erase save
 			// view.display();
+			//display only if input ??
 		}
 	}
 
-	public void inputHandler(String[] inputs) {
-		Print.print("Input handler\n" + inputs);
+	public void inputHandler(String input) {
+		// Print.print("Input handler\n" + input);
+		String lower = input.toLowerCase();
+
+		switch (lower) {
+			case "quit":
+				Print.print("Quitting game");
+				isRunning = false;
+				break;
+			case "switch":
+				view.switchMode();
+				break;
+			case "load": // only start ?
+				break;
+			case "new": // only start ?
+				break;
+
+
+
+			default:
+				Print.print("Unknown command");
+				break;
+		}
+
+
 		//state = 'start'
 			// if res[0] == 'load' -> loadPlayer(res[1])
 			// if res[0] == 'new' -> createPlayer(res[1])
-			// if res[0] == 'quit' -> isRunning = false
 			// if res[0] == switch -> change between GUI and console
 			// else -> error
 		//state = 'game'
 			// if res[0] == 'move' -> movePlayer(res[1])
 			// if res[0] == 'fight' -> fight()
 			// if res[0] == 'run' -> run()
-			// if res[0] == 'quit' -> isRunning = false
 			// if res[0] == 'save' -> savePlayer()
 			// if res[0] == 'stats' -> displayStats()
 			// if res[0] == switch -> change between GUI and console

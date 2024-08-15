@@ -3,10 +3,10 @@ all: build
 build:
 	mvn -f Swingy clean package
 
-gui: build
+gui:
 	java -jar Swingy/target/Swingy-1.jar gui
 
-console: build
+console:
 	java -jar Swingy/target/Swingy-1.jar console
 
 clean:
