@@ -8,22 +8,56 @@ import java.util.Arrays;
 
 import swingy.view.Print;
 
-public class GameController {
-	private GameModel model;
-	private GameView view;
+enum State
+{
+	NONE,
+	START,
+	NEW,
+	LOAD,
+	GAME,
+	FIGHT;
+}
 
-	private boolean isRunning = true;
+public class GameController
+{
+	private GameModel	model;
+	private GameView	view;
 
-	private String state = "start";
+	private boolean		isRunning = true;
 
-	public GameController(GameModel model, GameView view) {
+	private State		state = State.START;
+	private State		subState = State.NONE;
+
+	public GameController(GameModel model, GameView view)
+	{
 		this.model = model;
 		this.view = view;
 	}
 
-	public void startGame() { // fusion of startGame and gameLoop -> faire des sous fonctions (classes ?)
+	public void	startGame()  // fusion of startGame and gameLoop -> faire des sous fonctions (classes ?)
+	{
 		Print.print("Game is starting");
-		// load or create player // fct, stuck till you have a player
+		// create map
+		// int size = (model.getPlayer().getLevel() - 1) * 5 + 10 - (model.getPlayer().getLevel() % 2);
+		// model.setMap(MapGenerator.getInstance().newMap(size));
+		//
+		// loop
+		heroSelect();
+		gameLoop();
+
+		// end
+		endGame();
+	}
+
+	private void	heroSelect()
+	{
+		this.view.heroSelect();
+		
+		//state = 'start'
+		// if res[0] == 'load' -> loadPlayer(res[1])
+		// if res[0] == 'new' -> createPlayer(res[1])
+		//sub state for each ?
+
 		// res = view.loadOrNewPlayer();
 		// if (res[0] == "load") {
 		// 	model.loadPlayer(res[1]);
@@ -31,22 +65,13 @@ public class GameController {
 		// else if (res[0] == "new") {
 		// 	model.createPlayer(res[1]);
 		// }
-		//
-		// create map
-		// int size = (model.getPlayer().getLevel() - 1) * 5 + 10 - (model.getPlayer().getLevel() % 2);
-		// model.setMap(MapGenerator.getInstance().newMap(size));
-		//
-		// loop
-		state = "game";
-		gameLoop();
-
-		// end
-		endGame();
 	}
 
-	public void gameLoop() {
+
+	private void	gameLoop()
+	{
 		String input;
-		while (isRunning) { // while player is alive or quit
+		while (this.isRunning) { // while player is alive or quit.
 			input = view.getInput();
 			inputHandler(input);
 			//check player pos for encounter -> ded -> isRunning = false -> erase save
@@ -55,54 +80,100 @@ public class GameController {
 		}
 	}
 
-	public void inputHandler(String input) {
-		// Print.print("Input handler\n" + input);
+
+	private void	inputHandler(String input)
+	{
 		String lower = input.toLowerCase();
+		Print.print("\nInput handler\n" + lower);
 
-		switch (lower) {
-			case "quit":
-				Print.print("Quitting game");
-				isRunning = false;
-				break;
-			case "switch":
-				view.switchMode();
-				break;
-			case "load": // only start ?
-				break;
-			case "new": // only start ?
-				break;
-
-
-
-			default:
-				Print.print("Unknown command");
-				break;
+		if (lower.equals("quit")) {
+			//save and quit
+			Print.print("Quitting game");
+			this.isRunning = false;
 		}
-
-
-		//state = 'start'
-			// if res[0] == 'load' -> loadPlayer(res[1])
-			// if res[0] == 'new' -> createPlayer(res[1])
-			// if res[0] == switch -> change between GUI and console
-			// else -> error
-		//state = 'game'
-			// if res[0] == 'move' -> movePlayer(res[1])
-			// if res[0] == 'fight' -> fight()
-			// if res[0] == 'run' -> run()
-			// if res[0] == 'save' -> savePlayer()
-			// if res[0] == 'stats' -> displayStats()
-			// if res[0] == switch -> change between GUI and console
-			// else -> error
+		else if (lower.equals("switch"))
+			view.switchMode();
+		else {
+			if (this.state == State.START)
+				startStateInput(lower);
+			else if (this.state == State.GAME)
+				gameStateInput(lower);
+		}
 		//state = 'end'
 			// nothing ?
 
 	}
 
-	public void endGame() {
+
+	private void	startStateInput(String input)
+	{
+		//state = 'start'
+		// if res[0] == 'load' -> loadPlayer(res[1])
+		// if res[0] == 'new' -> createPlayer(res[1])
+		//sub state for each ?
+
+		// res = view.loadOrNewPlayer();
+		// if (res[0] == "load") {
+		// 	model.loadPlayer(res[1]);
+		// }
+		// else if (res[0] == "new") {
+		// 	model.createPlayer(res[1]);
+		// }
+
+		if (input.equals("load") && this.subState == State.NONE)
+			this.subState = State.LOAD;
+		else if (input.equals("new") && this.subState == State.NONE)
+			this.subState = State.NEW;
+		else
+			Print.print("Unknown command");
+	}
+
+
+	private void	gameStateInput(String input)
+	{
+		//state = 'game'
+		// if res[0] == 'move' -> movePlayer(res[1])
+		// if res[0] == 'save' -> savePlayer()
+		// if res[0] == 'stats' -> displayStats()
+		// if res[0] == switch -> change between GUI and console
+		// else -> error
+
+		if (this.subState == State.FIGHT) {
+			if (input.equals("fight"))
+				Print.print("fight"); //TODO
+			else if (input.equals("fight"))
+				Print.print("run"); //TODO : 50% chance ?
+			else
+				Print.print("Unknown command");
+			return;
+		}
+
+		switch (input) {
+			case "save":
+				break;
+			case "stats":
+				break;
+			case "north":
+				break;
+			case "south":
+				break;
+			case "east":
+				break;
+			case "west":
+				break;
+			default:
+				Print.print("Unknown command");
+				break;
+		}
+	}
+
+
+	private void	endGame()
+	{
 		// verif if player
 
 		// display end game
-		// if dead -> delete save
+		// if dead -> delete save or go back and lose 1 lvl
 		// if quit -> save
 	}
 }

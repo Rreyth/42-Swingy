@@ -14,4 +14,6 @@ clean:
 
 fclean: clean
 
-PHONY: all build clean fclean gui console
+re: fclean all
+
+PHONY: all build clean fclean gui console re
