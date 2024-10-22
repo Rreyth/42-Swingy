@@ -34,37 +34,58 @@ public class GameController
 		this.view = view;
 	}
 
-	public void	startGame()  // fusion of startGame and gameLoop -> faire des sous fonctions (classes ?)
+	public void	startGame()
 	{
 		Print.print("Game is starting");
+
+		heroSelect();
+
 		// create map
 		// int size = (model.getPlayer().getLevel() - 1) * 5 + 10 - (model.getPlayer().getLevel() % 2);
 		// model.setMap(MapGenerator.getInstance().newMap(size));
 		//
-		// loop
-		heroSelect();
-		gameLoop();
 
-		// end
-		endGame();
+		gameLoop();
 	}
 
 	private void	heroSelect()
 	{
-		this.view.heroSelect();
-		
-		//state = 'start'
-		// if res[0] == 'load' -> loadPlayer(res[1])
-		// if res[0] == 'new' -> createPlayer(res[1])
-		//sub state for each ?
+		String[] res;
+		res = this.view.heroSelect();
 
-		// res = view.loadOrNewPlayer();
-		// if (res[0] == "load") {
-		// 	model.loadPlayer(res[1]);
-		// }
-		// else if (res[0] == "new") {
-		// 	model.createPlayer(res[1]);
-		// }
+		if (res[0].equals("quit"))
+			quitGame();
+		else if (res[0].equals("create"))
+		{
+			Print.print(res[0] + " name: " + res[1]); //TODO: rm
+			if (this.model.alreadyExist(res[1]))
+			{
+				// TODO: ask if want to load or choose another name
+			}
+			else
+			{
+				// ask for hero class -> create hero 
+				String heroClass = this.view.classSelect();
+				Print.print("\n\n\n classe = " + heroClass);
+				if (heroClass.equals("quit"))
+					quitGame();
+				else
+					this.model.createPlayer(res[1], heroClass);
+			}
+			quitGame(); //TODO: rm
+		}
+		else if (res[0].equals("load"))
+		{
+			Print.print(res[0] + " name: " + res[1]);
+			if (!this.model.alreadyExist(res[1]))
+			{
+				Print.print("Error: Name does not exist");
+				this.heroSelect();
+			}
+			else
+				this.model.loadPlayer(res[1]);
+			quitGame(); //TODO: rm
+		}
 	}
 
 
@@ -72,11 +93,10 @@ public class GameController
 	{
 		String input;
 		while (this.isRunning) { // while player is alive or quit.
+			// view.display();
 			input = view.getInput();
 			inputHandler(input);
 			//check player pos for encounter -> ded -> isRunning = false -> erase save
-			// view.display();
-			//display only if input ??
 		}
 	}
 
@@ -86,14 +106,12 @@ public class GameController
 		String lower = input.toLowerCase();
 		Print.print("\nInput handler\n" + lower);
 
-		if (lower.equals("quit")) {
-			//save and quit
-			Print.print("Quitting game");
-			this.isRunning = false;
-		}
+		if (lower.equals("quit"))
+			quitGame();
 		else if (lower.equals("switch"))
 			view.switchMode();
-		else {
+		else
+		{
 			if (this.state == State.START)
 				startStateInput(lower);
 			else if (this.state == State.GAME)
@@ -105,7 +123,7 @@ public class GameController
 	}
 
 
-	private void	startStateInput(String input)
+	private void	startStateInput(String input) // TODO: remove ?
 	{
 		//state = 'start'
 		// if res[0] == 'load' -> loadPlayer(res[1])
@@ -125,7 +143,7 @@ public class GameController
 		else if (input.equals("new") && this.subState == State.NONE)
 			this.subState = State.NEW;
 		else
-			Print.print("Unknown command");
+			Print.print("Error: Unknown command");
 	}
 
 
@@ -144,7 +162,7 @@ public class GameController
 			else if (input.equals("fight"))
 				Print.print("run"); //TODO : 50% chance ?
 			else
-				Print.print("Unknown command");
+				Print.print("Error: Unknown command");
 			return;
 		}
 
@@ -162,18 +180,16 @@ public class GameController
 			case "west":
 				break;
 			default:
-				Print.print("Unknown command");
+				Print.print("Error: Unknown command");
 				break;
 		}
 	}
 
 
-	private void	endGame()
+	private	void	quitGame()
 	{
-		// verif if player
-
-		// display end game
-		// if dead -> delete save or go back and lose 1 lvl
-		// if quit -> save
+		//save and quit
+		Print.print("Quitting game");
+		this.isRunning = false;
 	}
 }

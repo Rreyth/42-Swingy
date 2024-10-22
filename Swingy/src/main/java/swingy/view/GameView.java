@@ -1,6 +1,9 @@
 package swingy.view;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.List;
+
 
 public class GameView {
 	private String[] inputs;
@@ -20,7 +23,7 @@ public class GameView {
 
 	public String	getInput()
 	{
-		if (mode.equals("console")) {
+		if (this.mode.equals("console")) {
 			System.out.println("Enter your command: ");
 			Scanner scanner = new Scanner(System.in);
 			String input = scanner.nextLine();
@@ -34,12 +37,12 @@ public class GameView {
 
 	public void	switchMode()
 	{
-		if (mode.equals("console")) {
-			mode = "gui";
+		if (this.mode.equals("console")) {
+			this.mode = "gui";
 			// create gui -> open window etc...
 		}
 		else {
-			mode = "console";
+			this.mode = "console";
 			// kill gui
 		}
 	}
@@ -47,7 +50,7 @@ public class GameView {
 
 	public String	getMode()
 	{
-		return mode;
+		return this.mode;
 	}
 
 
@@ -57,29 +60,70 @@ public class GameView {
 	}
 
 
-	public void	heroSelect()
+	public String[]	heroSelect()
 	{
 		boolean	selected = false;
+		String[] res = {"quit"};
 		//System.out.println("Enter your command: ");
 		while (!selected)
 		{
-			if (mode.equals("console")) {
-				Print.print("Load or create a Hero?	(load / create)");
+			if (mode.equals("console"))
+			{
+				Print.print("Load or create a Hero?\t(load / create)");
 				Scanner scanner = new Scanner(System.in);
-				String input = scanner.nextLine();
-				input = input.toLowerCase();
+				String input = scanner.nextLine().toLowerCase();
 				if (input.equals("create"))
 				{
-
+					Print.print("Please enter a Hero name");
+					input = scanner.nextLine();
+					res = new String[]{"create", input};
+					selected = true;
 				}
 				else if (input.equals("load"))
 				{
 
 				}
+				else if (input.equals("quit"))
+					return (new String[]{input});
+				else if (input.equals("switch"))
+					this.switchMode();
 				else
-					Print.print("Unknown command\n");
-				//TODO: ADD QUIT AND SWITCH
+					Print.print("Error: Unknown command\n");
 			}
 		}
+		return (res);
+	}
+
+
+	public String classSelect()
+	{
+		boolean	selected = false;
+		String	heroClass = "";
+		List<String> classList = new ArrayList<>();
+
+		classList.add("warrior");
+		classList.add("mage");
+		classList.add("monk");
+		classList.add("quit");
+		while (!selected)
+		{
+			if (mode.equals("console"))
+			{
+				Print.print("Choose a Hero Class\t(Warrior / Mage / Monk)");
+				Scanner scanner = new Scanner(System.in);
+				String input = scanner.nextLine().toLowerCase();
+
+				if (classList.contains(input))
+				{
+					heroClass = input;
+					selected = true;
+				}
+				else if (input.equals("switch"))
+					this.switchMode();
+				else
+					Print.print("Error: Unknown command\n");
+			}
+		}
+		return (heroClass);
 	}
 }

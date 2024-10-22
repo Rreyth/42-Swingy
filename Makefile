@@ -7,6 +7,7 @@ gui:
 	java -jar Swingy/target/Swingy-1.jar gui
 
 console:
+	clear -x
 	java -jar Swingy/target/Swingy-1.jar console
 
 clean:
