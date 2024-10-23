@@ -1,49 +1,46 @@
 package swingy.model;
 
+import swingy.model.SaveData;
 import swingy.model.entity.Player;
 
-import java.io.BufferedWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.io.File;
+import java.util.Map;
+import java.util.TreeMap;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import com.google.gson.Gson;
+import java.lang.reflect.Type;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 
 public class GameModel
 {
-	// 1 player, 1 map, 1 array de saved players, 1 array of mobs ?
-	List<Player> savedPlayers = new ArrayList<>(); //TODO : replace with gamesave class and use gson to get saves
+	// 1 player, 1 map, 1 array of mobs ?
+	Map<String, SaveData>	saves = new TreeMap<>();
 
 	public GameModel()
 	{
-		String path = "Swingy/src/main/java/swingy/model/save/saveFile";
-		
-		try
-		{
-			List<String> save = Files.readAllLines(Paths.get(path));
-			this.saveParser(save);
-		}
-		catch (IOException error)
-		{
-			savedPlayers.clear();
-		}
-	}
+		String	path = "Swingy/src/main/java/swingy/model/save/saveFile";
 
-	
-	private	void	saveParser(List<String> save)
-	{
-		for (String line : save)
+		Gson	gson = new GsonBuilder().create();
+
+		try (FileReader reader = new FileReader(path))
 		{
-			System.out.println(line);
+			Type	savesType = new TypeToken<Map<String, SaveData>>() {}.getType();
+
+			this.saves = gson.fromJson(reader, savesType);
+		}
+		catch (IOException e)
+		{
 		}
 	}
 
 
 	public boolean	alreadyExist(String name)
 	{
-		if (savedPlayers.size() == 0)
+		if (this.saves.size() == 0)
 			return (false);
 
 		//TODO
@@ -66,9 +63,10 @@ public class GameModel
 	}
 
 
-	private void saveToFile() //TODO : use gson
+	private void saveToFile()
 	{
-		String path = "Swingy/src/main/java/swingy/model/save/saveFile";
+		String	path = "Swingy/src/main/java/swingy/model/save/saveFile";
+		Gson	gson = new GsonBuilder().setPrettyPrinting().create();
 
 		File saveFile = new File(path);
 		saveFile.delete();
@@ -79,18 +77,16 @@ public class GameModel
 		catch (IOException e)
 		{
 			System.err.println("Error while saving : " + e.getMessage());
+			return ;
 		}
 
-		String content = "{\n\t\"save3\" : {\n\t\t\"name\" : \"YEET\"\n\t}\n}\n"; //TODO : save formater
-
- 		try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path)))
+		try (FileWriter writer = new FileWriter(path))
 		{
-            writer.write(content);
-        }
+			gson.toJson(this.saves, writer);
+		}
 		catch (IOException e)
 		{
-            System.err.println("Error while saving : " + e.getMessage());
-        }
+			System.err.println("Error while saving : " + e.getMessage());
+		}
 	}
 }
-
