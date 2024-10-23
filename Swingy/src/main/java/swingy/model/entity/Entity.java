@@ -1,11 +1,14 @@
 package swingy.model.entity;
 
-import javax.validation.constraints.*;
+import swingy.model.validator.ValidName;
 import swingy.model.artifact.Artifact;
+
+import javax.validation.constraints.*;
+
 
 public class Entity {
 
-	@NotNull(message = "Name cannot be null")
+	@ValidName
 	protected String name;
 
 	@NotNull(message = "Type cannot be null")

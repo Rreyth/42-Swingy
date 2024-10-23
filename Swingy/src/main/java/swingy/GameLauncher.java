@@ -11,7 +11,6 @@ public class GameLauncher {
 		GameModel model = new GameModel();
 		GameView view = new GameView(args[0]);
 		GameController controller = new GameController(model, view);
-		// controller.startGame();
-
+		controller.startGame();
 	}
 }

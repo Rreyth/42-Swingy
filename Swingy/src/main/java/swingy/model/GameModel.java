@@ -3,6 +3,7 @@ package swingy.model;
 import swingy.model.SaveData;
 import swingy.model.entity.Player;
 
+// File and gson imports used for save
 import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,6 +15,12 @@ import java.lang.reflect.Type;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+// Validator imports
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.ConstraintViolation;
+import java.util.Set;
 
 public class GameModel
 {
@@ -40,20 +47,45 @@ public class GameModel
 
 	public boolean	alreadyExist(String name)
 	{
-		if (this.saves.size() == 0)
-			return (false);
-
-		//TODO
-		//true if name already exist
-		//else false
-
-		return (false);
+		return (this.saves.containsKey(name));
 	}
 
 
-	public	 void	createPlayer(String name, String heroClass)
+	public	 void	createPlayer(String name, String heroClass) //TODO
 	{
-		//TODO
+		System.out.println("create name: " + name + " - class: " + heroClass);
+		Player player = new Player.Builder()
+						.setName(name)
+						.setHeroClass(heroClass)
+						.setLevel(1)
+						.setExperience(0)
+						.setWeapon(null)
+						.setArmor(null)
+						.setHelm(null)
+						.build();
+
+		System.out.println("created");
+		System.out.println("validator test --------");
+
+
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+
+		Set<ConstraintViolation<Player>> violations = validator.validate(player);
+
+		if (!violations.isEmpty())
+		{
+			for (ConstraintViolation<Player> violation : violations)
+			{
+		        System.out.println(violation.getMessage());
+		    }
+		}
+		// else
+		// {
+		// 		all good
+		// }
+		System.out.println("validator tested --------");
+
 	}
 
 

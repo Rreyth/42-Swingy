@@ -1,12 +1,11 @@
 package swingy.controller;
 
+import swingy.view.Print;
 import swingy.view.GameView;
 import swingy.model.GameModel;
-// import swingy.controller.PlayerManager;
 
 import java.util.Arrays;
 
-import swingy.view.Print;
 
 enum State
 {
@@ -57,16 +56,14 @@ public class GameController
 			quitGame();
 		else if (res[0].equals("create"))
 		{
-			Print.print(res[0] + " name: " + res[1]); //TODO: rm
 			if (this.model.alreadyExist(res[1]))
 			{
+				Print.print("ALREADY EXIST");
 				// TODO: ask if want to load or choose another name
 			}
 			else
 			{
-				// ask for hero class -> create hero 
 				String heroClass = this.view.classSelect();
-				Print.print("\n\n\n classe = " + heroClass);
 				if (heroClass.equals("quit"))
 					quitGame();
 				else

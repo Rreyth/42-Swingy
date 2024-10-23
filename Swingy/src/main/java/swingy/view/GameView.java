@@ -62,10 +62,7 @@ public class GameView {
 
 	public String[]	heroSelect()
 	{
-		boolean	selected = false;
-		String[] res = {"quit"};
-		//System.out.println("Enter your command: ");
-		while (!selected)
+		while (true)
 		{
 			if (mode.equals("console"))
 			{
@@ -76,10 +73,9 @@ public class GameView {
 				{
 					Print.print("Please enter a Hero name");
 					input = scanner.nextLine();
-					res = new String[]{"create", input};
-					selected = true;
+					return (new String[]{"create", input});
 				}
-				else if (input.equals("load"))
+				else if (input.equals("load")) //TODO
 				{
 
 				}
@@ -91,21 +87,18 @@ public class GameView {
 					Print.print("Error: Unknown command\n");
 			}
 		}
-		return (res);
 	}
 
 
 	public String classSelect()
 	{
-		boolean	selected = false;
-		String	heroClass = "";
-		List<String> classList = new ArrayList<>();
+		List<String> classList = new ArrayList<>(); //TODO : rm verif, use validator instead
 
 		classList.add("warrior");
 		classList.add("mage");
 		classList.add("monk");
 		classList.add("quit");
-		while (!selected)
+		while (true)
 		{
 			if (mode.equals("console"))
 			{
@@ -113,17 +106,13 @@ public class GameView {
 				Scanner scanner = new Scanner(System.in);
 				String input = scanner.nextLine().toLowerCase();
 
-				if (classList.contains(input))
-				{
-					heroClass = input;
-					selected = true;
-				}
-				else if (input.equals("switch"))
+				if (input.equals("switch"))
 					this.switchMode();
+				else if (classList.contains(input))
+					return (input);
 				else
 					Print.print("Error: Unknown command\n");
 			}
 		}
-		return (heroClass);
 	}
 }
