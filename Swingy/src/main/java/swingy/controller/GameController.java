@@ -6,34 +6,30 @@ import swingy.model.GameModel;
 import swingy.model.map.GameMap;
 import swingy.controller.generators.MapGenerator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-
-//TODO: RM
-enum State
-{
-	NONE,
-	START,
-	NEW,
-	LOAD,
-	GAME,
-	FIGHT;
-}
+import java.util.List;
 
 
 public class GameController
 {
-	private GameModel	model;
-	private GameView	view;
-
-	private boolean		isRunning = true;
-
-	private State		state = State.GAME; //TODO: RM
-	private State		subState = State.NONE;
+	private GameModel		model;
+	private GameView		view;
+	private boolean			isRunning;
+	private boolean			isFighting;
+	private List<String>	moveList;
 
 	public GameController(GameModel model, GameView view)
 	{
 		this.model = model;
 		this.view = view;
+		this.isRunning = true;
+		this.isFighting = false;
+		this.moveList = new ArrayList<>();
+		this.moveList.add("north");
+		this.moveList.add("south");
+		this.moveList.add("east");
+		this.moveList.add("west");
 	}
 
 	public void	startGame()
@@ -105,69 +101,49 @@ public class GameController
 
 	private void	gameLoop()
 	{
-		String input;
 		while (this.isRunning) { // while player is alive or quit.
-			view.display(this.model.getGameMap());
-			input = this.view.getInput();
-			inputHandler(input);
-			//check player pos for encounter -> ded -> isRunning = false -> erase save
+			this.view.display(this.model.getGameMap());
+			Print.print("\nWhere do you want to go?\t(North/South/East/West)");
+			inputHandler(this.view.getInput().toLowerCase());
+			//TODO: check player pos for encounter -> ded -> isRunning = false -> erase save
+
+			if (this.model.getGameMap().isFinished())
+			{
+				this.view.display(this.model.getGameMap());
+				Print.print("\nYou have successfully completed the current map!");
+				Print.print("Get ready for the next one!");
+				int playerLevel = this.model.getPlayer().getLevel();
+				GameMap map = MapGenerator.getInstance().newMap(playerLevel);
+				this.model.setGameMap(map);
+			}
 		}
 	}
 
 
 	private void	inputHandler(String input)
 	{
-		String lower = input.toLowerCase();
-		Print.print("\nInput handler\n" + lower); //TODO: RM
+		Print.print("\nInput handler = " + input); //TODO: RM
 
-		if (lower.equals("quit"))
+		if (input.equals("quit"))
 			quitGame();
-		else if (lower.equals("switch"))
+		else if (input.equals("switch"))
 			view.switchMode();
-		else
+		// else if (input.equals("save")) // TODO
+		// 	this.model.saveGame();
+		// else if (input.equals("stats")) // TODO
+		// 	this.view.displayStats(this.model.getPlayerStats());
+		else if (this.moveList.contains(input))
+			this.model.getGameMap().movePlayer(input);
+		else if (isFighting) // TODO
 		{
-			gameStateInput(lower);
-		}
-		//state = 'end'
-			// nothing ?
-
-	}
-
-	private void	gameStateInput(String input) // TODO: RM ?
-	{
-		//state = 'game'
-		// if res[0] == 'move' -> movePlayer(res[1])
-		// if res[0] == 'save' -> savePlayer()
-		// if res[0] == 'stats' -> displayStats()
-		// if res[0] == switch -> change between GUI and console
-		// else -> error
-
-		if (this.subState == State.FIGHT) {
 			if (input.equals("fight"))
 				Print.print("fight"); //TODO
 			else if (input.equals("run"))
-				Print.print("run"); //TODO : 50% chance ?
-			else
-				Print.print("Error: Unknown command");
-			return;
+				Print.print("run"); //TODO : 50% chance
 		}
-
-		switch (input) {
-			case "save":
-				break;
-			case "stats":
-				break;
-			case "north":
-				break;
-			case "south":
-				break;
-			case "east":
-				break;
-			case "west":
-				break;
-			default:
-				Print.print("Error: Unknown command");
-				break;
+		else
+		{
+			Print.print("\nError: Unknown command");
 		}
 	}
 

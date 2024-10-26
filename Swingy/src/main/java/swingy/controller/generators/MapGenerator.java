@@ -45,5 +45,6 @@ public class MapGenerator
 		int	size;
 		size = map.getSize();
 		map.getTile(size / 2, size / 2).setPlayerHere(true);
+		map.setPlayerPos(size / 2, size / 2);
 	}
 }

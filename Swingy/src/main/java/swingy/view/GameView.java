@@ -32,10 +32,10 @@ public class GameView {
 			for (int x = 0; x < size; x++)
 			{
 				tile = map.getTile(x, y);
-				if (tile.isVisited())
-					line += "[X]";
-				else if (tile.hasPlayer())
+				if (tile.hasPlayer())
 					line += "[P]";
+				else if (tile.isVisited())
+					line += "[X]";
 				else
 					line += "[ ]";
 			}

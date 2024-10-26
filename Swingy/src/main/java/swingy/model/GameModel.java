@@ -128,7 +128,7 @@ public class GameModel
 	}
 
 	//METHODS
-	private void saveToFile()
+	private void	saveToFile()
 	{
 		String	path = "Swingy/src/main/java/swingy/model/save/saveFile";
 		Gson	gson = new GsonBuilder().setPrettyPrinting().create();
