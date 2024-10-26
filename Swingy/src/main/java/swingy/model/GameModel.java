@@ -25,6 +25,7 @@ import java.util.Set;
 public class GameModel
 {
 	// 1 player, 1 map, 1 array of mobs ?
+	Player					player;
 	Map<String, SaveData>	saves = new TreeMap<>();
 
 	public GameModel()
@@ -51,9 +52,9 @@ public class GameModel
 	}
 
 
-	public	 void	createPlayer(String name, String heroClass) //TODO
+	public boolean	createPlayer(String name, String heroClass)
 	{
-		System.out.println("create name: " + name + " - class: " + heroClass);
+		heroClass = heroClass.substring(0, 1).toUpperCase() + heroClass.substring(1);
 		Player player = new Player.Builder()
 						.setName(name)
 						.setHeroClass(heroClass)
@@ -64,9 +65,35 @@ public class GameModel
 						.setHelm(null)
 						.build();
 
-		System.out.println("created");
-		System.out.println("validator test --------");
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
 
+		Set<ConstraintViolation<Player>> violations = validator.validate(player);
+
+		if (!violations.isEmpty())
+		{
+			for (ConstraintViolation<Player> violation : violations)
+				System.out.println(violation.getMessage());
+			return (false);
+		}
+		this.player = player;
+		return (true);
+	}
+
+
+	public boolean	loadPlayer(String name)
+	{
+		SaveData	playerData = this.saves.get(name);
+
+		Player player = new Player.Builder() //TODO : add artifacts
+						.setName(playerData.getName())
+						.setHeroClass(playerData.getHeroClass())
+						.setLevel(playerData.getLvl())
+						.setExperience(playerData.getExp())
+						.setWeapon(null)
+						.setArmor(null)
+						.setHelm(null)
+						.build();
 
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
@@ -76,22 +103,11 @@ public class GameModel
 		if (!violations.isEmpty())
 		{
 			for (ConstraintViolation<Player> violation : violations)
-			{
-		        System.out.println(violation.getMessage());
-		    }
+				System.out.println(violation.getMessage());
+			return (false);
 		}
-		// else
-		// {
-		// 		all good
-		// }
-		System.out.println("validator tested --------");
-
-	}
-
-
-	public	 void	loadPlayer(String name)
-	{
-		//TODO
+		this.player = player;
+		return (true);
 	}
 
 

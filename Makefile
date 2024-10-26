@@ -10,6 +10,10 @@ console:
 	clear -x
 	java -jar Swingy/target/Swingy-1-jar-with-dependencies.jar console
 
+run:
+	clear -x
+	java -jar Swingy/target/Swingy-1-jar-with-dependencies.jar
+
 clean:
 	mvn -f Swingy clean
 

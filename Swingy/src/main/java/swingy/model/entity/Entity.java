@@ -6,8 +6,8 @@ import swingy.model.artifact.Artifact;
 import javax.validation.constraints.*;
 
 
-public class Entity {
-
+public class Entity
+{
 	@ValidName
 	protected String name;
 
@@ -34,7 +34,8 @@ public class Entity {
 	protected Artifact armor;
 	protected Artifact helm;
 
-	public Entity(String p_name, String p_type, int p_level, int p_experience, int p_attack, int p_defense, int p_hitPoints, Artifact p_weapon, Artifact p_armor, Artifact p_helm) {
+	public Entity(String p_name, String p_type, int p_level, int p_experience, int p_attack, int p_defense, int p_hitPoints, Artifact p_weapon, Artifact p_armor, Artifact p_helm)
+	{
 		this.name = p_name;
 		this.type = p_type;
 		this.level = p_level;
@@ -48,84 +49,104 @@ public class Entity {
 	}
 
 	//GETTERS
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 
-	public String getType() {
+	public String getType()
+	{
 		return type;
 	}
 
-	public int getLevel() {
+	public int getLevel()
+	{
 		return level;
 	}
 
-	public int getExperience() {
+	public int getExperience()
+	{
 		return experience;
 	}
 
-	public int getAttack() {
+	public int getAttack()
+	{
 		return attack;
 	}
 
-	public int getDefense() {
+	public int getDefense()
+	{
 		return defense;
 	}
 
-	public int getHitPoints() {
+	public int getHitPoints()
+	{
 		return hitPoints;
 	}
 
-	public Artifact getWeapon() {
+	public Artifact getWeapon()
+	{
 		return weapon;
 	}
 
-	public Artifact getArmor() {
+	public Artifact getArmor()
+	{
 		return armor;
 	}
 
-	public Artifact getHelm() {
+	public Artifact getHelm()
+	{
 		return helm;
 	}
 
 	//SETTERS
-	public void setName(String p_name) {
+	public void setName(String p_name)
+	{
 		this.name = p_name;
 	}
 
-	public void setType(String p_type) {
+	public void setType(String p_type)
+	{
 		this.type = p_type;
 	}
 
-	public void setLevel(int p_level) {
+	public void setLevel(int p_level)
+	{
 		this.level = p_level;
 	}
 
-	public void setExperience(int p_experience) {
+	public void setExperience(int p_experience)
+	{
 		this.experience = p_experience;
 	}
 
-	public void setAttack(int p_attack) {
+	public void setAttack(int p_attack)
+	{
 		this.attack = p_attack;
 	}
 
-	public void setDefense(int p_defense) {
+	public void setDefense(int p_defense)
+	{
 		this.defense = p_defense;
 	}
 
-	public void setHitPoints(int p_hitPoints) {
+	public void setHitPoints(int p_hitPoints)
+	{
 		this.hitPoints = p_hitPoints;
 	}
 
-	public void setWeapon(Artifact p_weapon) {
+	public void setWeapon(Artifact p_weapon)
+	{
 		this.weapon = p_weapon;
 	}
 
-	public void setArmor(Artifact p_armor) {
+	public void setArmor(Artifact p_armor)
+	{
 		this.armor = p_armor;
 	}
 
-	public void setHelm(Artifact p_helm) {
+	public void setHelm(Artifact p_helm)
+	{
 		this.helm = p_helm;
 	}
 }

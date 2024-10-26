@@ -12,18 +12,13 @@ public class Player extends Entity {
 
 	private int toNextLevel;
 
-	// public Player(String name, String heroClass, int level, int experience, Artifact weapon, Artifact armor, Artifact helm)
-	// {
-	// 	super(name, "Hero", level, experience, attack, defense, hitPoints, weapon, armor, helm);
-	// 	this.heroClass = heroClass;
-	// }
-
 	private Player(Builder builder)
 	{
 		super(builder.name, "Hero", builder.level, builder.experience,
 				builder.attack, builder.defense, builder.hitPoints,
 				builder.weapon, builder.armor, builder.helm);
 		this.heroClass = builder.heroClass;
+		// TODO: set toNextLevel
 	}
 
 	public String getHeroClass()

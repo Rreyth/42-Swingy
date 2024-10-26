@@ -6,7 +6,7 @@ import swingy.model.GameModel;
 
 import java.util.Arrays;
 
-
+//TODO: RM
 enum State
 {
 	NONE,
@@ -17,6 +17,7 @@ enum State
 	FIGHT;
 }
 
+
 public class GameController
 {
 	private GameModel	model;
@@ -24,7 +25,7 @@ public class GameController
 
 	private boolean		isRunning = true;
 
-	private State		state = State.START;
+	private State		state = State.GAME; //TODO: RM
 	private State		subState = State.NONE;
 
 	public GameController(GameModel model, GameView view)
@@ -35,9 +36,8 @@ public class GameController
 
 	public void	startGame()
 	{
-		Print.print("Game is starting");
-
 		heroSelect();
+		Print.print("\nGame starts");
 
 		// create map
 		// int size = (model.getPlayer().getLevel() - 1) * 5 + 10 - (model.getPlayer().getLevel() % 2);
@@ -58,30 +58,47 @@ public class GameController
 		{
 			if (this.model.alreadyExist(res[1]))
 			{
-				Print.print("ALREADY EXIST");
-				// TODO: ask if want to load or choose another name
+				Print.print("\nError: Name already exist");
+				Print.print("Do you want to load Hero " + res[1] + "?\t(yes/no)");
+				String input = this.view.getInput().toLowerCase();
+				if (!input.equals("yes") || !this.model.loadPlayer(res[1]))
+					this.heroSelect();
 			}
 			else
 			{
 				String heroClass = this.view.classSelect();
 				if (heroClass.equals("quit"))
+				{
 					quitGame();
-				else
-					this.model.createPlayer(res[1], heroClass);
+					return;
+				}
+				else if (!this.model.createPlayer(res[1], heroClass))
+					this.heroSelect();
 			}
-			quitGame(); //TODO: rm
 		}
 		else if (res[0].equals("load"))
 		{
-			Print.print(res[0] + " name: " + res[1]);
 			if (!this.model.alreadyExist(res[1]))
 			{
-				Print.print("Error: Name does not exist");
-				this.heroSelect();
+				Print.print("\nError: Hero " + res[1] + " does not exist");
+				Print.print("Do you want to create it?\t(yes/no)");
+				String input = this.view.getInput().toLowerCase();
+				if (!input.equals("yes"))
+					this.heroSelect();
+				else
+				{
+					String heroClass = this.view.classSelect();
+					if (heroClass.equals("quit"))
+					{
+						quitGame();
+						return;
+					}
+					else if (!this.model.createPlayer(res[1], heroClass))
+						this.heroSelect();
+				}
 			}
-			else
-				this.model.loadPlayer(res[1]);
-			quitGame(); //TODO: rm
+			else if (!this.model.loadPlayer(res[1]))
+				this.heroSelect();
 		}
 	}
 
@@ -91,7 +108,7 @@ public class GameController
 		String input;
 		while (this.isRunning) { // while player is alive or quit.
 			// view.display();
-			input = view.getInput();
+			input = this.view.getInput();
 			inputHandler(input);
 			//check player pos for encounter -> ded -> isRunning = false -> erase save
 		}
@@ -101,7 +118,7 @@ public class GameController
 	private void	inputHandler(String input)
 	{
 		String lower = input.toLowerCase();
-		Print.print("\nInput handler\n" + lower);
+		Print.print("\nInput handler\n" + lower); //TODO: RM
 
 		if (lower.equals("quit"))
 			quitGame();
@@ -109,42 +126,14 @@ public class GameController
 			view.switchMode();
 		else
 		{
-			if (this.state == State.START)
-				startStateInput(lower);
-			else if (this.state == State.GAME)
-				gameStateInput(lower);
+			gameStateInput(lower);
 		}
 		//state = 'end'
 			// nothing ?
 
 	}
 
-
-	private void	startStateInput(String input) // TODO: remove ?
-	{
-		//state = 'start'
-		// if res[0] == 'load' -> loadPlayer(res[1])
-		// if res[0] == 'new' -> createPlayer(res[1])
-		//sub state for each ?
-
-		// res = view.loadOrNewPlayer();
-		// if (res[0] == "load") {
-		// 	model.loadPlayer(res[1]);
-		// }
-		// else if (res[0] == "new") {
-		// 	model.createPlayer(res[1]);
-		// }
-
-		if (input.equals("load") && this.subState == State.NONE)
-			this.subState = State.LOAD;
-		else if (input.equals("new") && this.subState == State.NONE)
-			this.subState = State.NEW;
-		else
-			Print.print("Error: Unknown command");
-	}
-
-
-	private void	gameStateInput(String input)
+	private void	gameStateInput(String input) // TODO: RM ?
 	{
 		//state = 'game'
 		// if res[0] == 'move' -> movePlayer(res[1])
@@ -156,7 +145,7 @@ public class GameController
 		if (this.subState == State.FIGHT) {
 			if (input.equals("fight"))
 				Print.print("fight"); //TODO
-			else if (input.equals("fight"))
+			else if (input.equals("run"))
 				Print.print("run"); //TODO : 50% chance ?
 			else
 				Print.print("Error: Unknown command");
