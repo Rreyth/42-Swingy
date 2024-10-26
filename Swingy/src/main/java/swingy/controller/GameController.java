@@ -3,6 +3,8 @@ package swingy.controller;
 import swingy.view.Print;
 import swingy.view.GameView;
 import swingy.model.GameModel;
+import swingy.model.map.GameMap;
+import swingy.controller.generators.MapGenerator;
 
 import java.util.Arrays;
 
@@ -37,13 +39,17 @@ public class GameController
 	public void	startGame()
 	{
 		heroSelect();
+		if (!this.isRunning)
+			return;
+
+		int		playerLevel;
+		GameMap	map;
+
+		playerLevel = this.model.getPlayer().getLevel();
+		map = MapGenerator.getInstance().newMap(playerLevel);
+		this.model.setGameMap(map);
+
 		Print.print("\nGame starts");
-
-		// create map
-		// int size = (model.getPlayer().getLevel() - 1) * 5 + 10 - (model.getPlayer().getLevel() % 2);
-		// model.setMap(MapGenerator.getInstance().newMap(size));
-		//
-
 		gameLoop();
 	}
 
@@ -68,10 +74,7 @@ public class GameController
 			{
 				String heroClass = this.view.classSelect();
 				if (heroClass.equals("quit"))
-				{
 					quitGame();
-					return;
-				}
 				else if (!this.model.createPlayer(res[1], heroClass))
 					this.heroSelect();
 			}
@@ -89,10 +92,7 @@ public class GameController
 				{
 					String heroClass = this.view.classSelect();
 					if (heroClass.equals("quit"))
-					{
 						quitGame();
-						return;
-					}
 					else if (!this.model.createPlayer(res[1], heroClass))
 						this.heroSelect();
 				}
@@ -107,7 +107,7 @@ public class GameController
 	{
 		String input;
 		while (this.isRunning) { // while player is alive or quit.
-			// view.display();
+			view.display(this.model.getGameMap());
 			input = this.view.getInput();
 			inputHandler(input);
 			//check player pos for encounter -> ded -> isRunning = false -> erase save
@@ -175,7 +175,7 @@ public class GameController
 	private	void	quitGame()
 	{
 		//save and quit
-		Print.print("Quitting game");
+		Print.print("\nQuitting game");
 		this.isRunning = false;
 	}
 }

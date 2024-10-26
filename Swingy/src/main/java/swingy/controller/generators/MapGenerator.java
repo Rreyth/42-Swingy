@@ -1,28 +1,49 @@
 package swingy.controller.generators;
 
-import swingy.model.map.Map;
+import swingy.model.map.GameMap;
 import swingy.model.map.Tile;
 
-public class MapGenerator {
-	private static MapGenerator instance = null;
+public class MapGenerator
+{
+	private static MapGenerator	instance = null;
 
 	private MapGenerator() {}
 
-	public static MapGenerator getInstance() {
-		if (instance == null) {
+	public static MapGenerator	getInstance()
+	{
+		if (instance == null)
+		{
 			instance = new MapGenerator();
 		}
 		return instance;
 	}
 
-	public Map newMap(int size) { // add event gen ?
-		Map map = new Map(size);
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				map.setTile(i, j, new Tile(i, j));
+	public GameMap	newMap(int playerLevel)
+	{
+		int	size = this.computeSize(playerLevel);
+		GameMap	map = new GameMap(size);
+		for (int i = 0; i < size; i++)
+		{
+			for (int j = 0; j < size; j++)
+			{
+				map.setTile(j, i, new Tile(j, i));
 			}
 		}
-		return map;
+		this.populateMap(map);
+		return (map);
 	}
-	// When a map is generated, villains of varying power will be spread randomly over the map
+
+	private int	computeSize(int playerLevel)
+	{
+		return ((playerLevel - 1) * 5 + 10 - (playerLevel % 2));
+	}
+
+	private void	populateMap(GameMap	map)
+	{
+		//TODO : add mob gen + floor artifact gen
+		// When a map is generated, villains of varying power will be spread randomly over the map
+		int	size;
+		size = map.getSize();
+		map.getTile(size / 2, size / 2).setPlayerHere(true);
+	}
 }

@@ -1,6 +1,7 @@
 package swingy.model;
 
 import swingy.model.SaveData;
+import swingy.model.map.GameMap;
 import swingy.model.entity.Player;
 
 // File and gson imports used for save
@@ -16,20 +17,22 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 // Validator imports
-import javax.validation.Validation;
+import java.util.Set;
 import javax.validation.Validator;
+import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import javax.validation.ConstraintViolation;
-import java.util.Set;
 
 public class GameModel
 {
-	// 1 player, 1 map, 1 array of mobs ?
 	Player					player;
-	Map<String, SaveData>	saves = new TreeMap<>();
+	Map<String, SaveData>	saves;
+	GameMap					map;
+
 
 	public GameModel()
 	{
+		this.saves = new TreeMap<>();
 		String	path = "Swingy/src/main/java/swingy/model/save/saveFile";
 
 		Gson	gson = new GsonBuilder().create();
@@ -45,12 +48,27 @@ public class GameModel
 		}
 	}
 
+	//GETTERS
+	public GameMap	getGameMap()
+	{
+		return (this.map);
+	}
+
+	public Player	getPlayer()
+	{
+		return (this.player);
+	}
 
 	public boolean	alreadyExist(String name)
 	{
 		return (this.saves.containsKey(name));
 	}
 
+	//SETTERS
+	public void	setGameMap(GameMap newMap)
+	{
+		this.map = newMap;
+	}
 
 	public boolean	createPlayer(String name, String heroClass)
 	{
@@ -79,7 +97,6 @@ public class GameModel
 		this.player = player;
 		return (true);
 	}
-
 
 	public boolean	loadPlayer(String name)
 	{
@@ -110,7 +127,7 @@ public class GameModel
 		return (true);
 	}
 
-
+	//METHODS
 	private void saveToFile()
 	{
 		String	path = "Swingy/src/main/java/swingy/model/save/saveFile";
