@@ -143,6 +143,25 @@ public class GameModel
 		return (new int[]{lvl, lvlPercentage, atk, def, hp});
 	}
 
+	public void	save()
+	{
+		SaveData	playerData = new SaveData();
+
+		playerData.setName(this.player.getName());
+		playerData.setHeroClass(this.player.getHeroClass());
+		playerData.setLvl(this.player.getLevel());
+		playerData.setExp(this.player.getExperience());
+		playerData.setWeapon("none");
+		playerData.setArmor("none");
+		playerData.setHelm("none");
+		//TODO : add artifacts saving
+		// playerData.setWeapon(this.player.getWeapon());
+		// playerData.setArmor(this.player.getArmor());
+		// playerData.setHelm(this.player.getHelm());
+
+		this.saves.put(this.player.getName(), playerData);
+	}
+
 	private void	saveToFile()
 	{
 		String	path = "Swingy/src/main/java/swingy/model/save/saveFile";
@@ -168,5 +187,11 @@ public class GameModel
 		{
 			System.err.println("Error while saving : " + e.getMessage());
 		}
+	}
+
+	public void	quitGame()
+	{
+		this.save();
+		this.saveToFile();
 	}
 }

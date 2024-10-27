@@ -110,7 +110,7 @@ public class GameController
 	{
 		while (this.isRunning) { // while player is alive or quit.
 			this.view.display(this.model.getGameMap());
-			Print.print("\nWhere do you want to go?\t(North/South/East/West)");
+			Print.print("\nWhere do you want to go?\t(North/South/East/West)(stats/save/switch/quit)");
 			inputHandler(this.view.getInput().toLowerCase());
 			//TODO: check player pos for encounter -> ded -> isRunning = false -> erase save
 
@@ -135,8 +135,8 @@ public class GameController
 			quitGame();
 		else if (input.equals("switch"))
 			view.switchMode();
-		// else if (input.equals("save")) // TODO
-		// 	this.model.saveGame();
+		else if (input.equals("save"))
+			this.model.save();
 		else if (input.equals("stats"))
 			this.view.displayStats(this.model.getPlayerStats());
 		else if (this.moveList.contains(input))
@@ -157,8 +157,8 @@ public class GameController
 
 	private	void	quitGame()
 	{
-		//save and quit
 		Print.print("\nQuitting game");
+		this.model.quitGame();
 		this.isRunning = false;
 	}
 }
