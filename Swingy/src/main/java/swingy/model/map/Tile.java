@@ -1,5 +1,7 @@
 package swingy.model.map;
 
+import swingy.model.entity.Villain;
+
 public class Tile
 {
 	private int		x;
@@ -7,6 +9,7 @@ public class Tile
 	private boolean	occupied;
 	private boolean	visited;
 	private boolean	playerHere;
+	private	Villain	villain = null;
 
 	public Tile(int x, int y)
 	{
@@ -42,6 +45,11 @@ public class Tile
 		return (this.playerHere);
 	}
 
+	public Villain	getVillain()
+	{
+		return (this.villain);
+	}
+
 	public void	setOccupied(boolean occupied)
 	{
 		this.occupied = occupied;
@@ -55,5 +63,10 @@ public class Tile
 	public void	setPlayerHere(boolean here)
 	{
 		this.playerHere = here;
+	}
+
+	public void	setVillain(Villain villain)
+	{
+		this.villain = villain;
 	}
 }
