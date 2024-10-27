@@ -4,6 +4,7 @@ import swingy.view.Print;
 import swingy.view.GameView;
 import swingy.model.GameModel;
 import swingy.model.map.GameMap;
+import swingy.model.entity.Player;
 import swingy.controller.generators.MapGenerator;
 
 import java.util.ArrayList;
@@ -38,10 +39,16 @@ public class GameController
 		if (!this.isRunning)
 			return;
 
+		Player	player;
+		player = this.model.getPlayer();
+
+		this.view.initPlayerVisual(player.getName(),
+									player.getHeroClass());
+
 		int		playerLevel;
 		GameMap	map;
 
-		playerLevel = this.model.getPlayer().getLevel();
+		playerLevel = player.getLevel();
 		map = MapGenerator.getInstance().newMap(playerLevel);
 		this.model.setGameMap(map);
 
@@ -130,8 +137,8 @@ public class GameController
 			view.switchMode();
 		// else if (input.equals("save")) // TODO
 		// 	this.model.saveGame();
-		// else if (input.equals("stats")) // TODO
-		// 	this.view.displayStats(this.model.getPlayerStats());
+		else if (input.equals("stats"))
+			this.view.displayStats(this.model.getPlayerStats());
 		else if (this.moveList.contains(input))
 			this.model.getGameMap().movePlayer(input);
 		else if (isFighting) // TODO

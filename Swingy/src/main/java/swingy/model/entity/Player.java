@@ -10,7 +10,10 @@ public class Player extends Entity {
 	@Pattern(regexp = "^(Warrior|Mage|Monk)$", message = "Error: Hero class must be Warrior, Mage or Monk")
 	private String heroClass;
 
-	private int toNextLevel;
+	private int	toNextLevel;
+	private int	multAtk;
+	private int	multDef;
+	private int	multHp;
 
 	private Player(Builder builder)
 	{
@@ -18,7 +21,35 @@ public class Player extends Entity {
 				builder.attack, builder.defense, builder.hitPoints,
 				builder.weapon, builder.armor, builder.helm);
 		this.heroClass = builder.heroClass;
-		// TODO: set toNextLevel
+		this.toNextLevel = this.level * 1000 + (this.level - 1) * (this.level - 1) * 450;
+		this.initStats();
+	}
+
+	private void	initStats()
+	{
+		int	startAtk = this.attack;
+		int	startDef = this.defense;
+		int	startHp = this.hitPoints;
+
+		this.multAtk = 3;
+		this.multDef = 4;
+		this.multHp = 20;
+		if (this.heroClass.equals("Warrior"))
+		{
+			this.multAtk = 5;
+			this.multDef = 3;
+			this.multHp = 15;
+		}
+		else if (this.heroClass.equals("Mage"))
+		{
+			this.multAtk = 7;
+			this.multDef = 2;
+			this.multHp = 10;
+		}
+
+		this.attack = startAtk + ((this.level - 1) * this.multAtk);
+		this.defense = startDef + ((this.level - 1) * this.multDef);
+		this.hitPoints = startHp + ((this.level - 1) * this.multHp);
 	}
 
 	public String getHeroClass()
@@ -36,14 +67,14 @@ public class Player extends Entity {
 		this.toNextLevel = p_toNextLevel;
 	}
 
-	public void levelUp()  // if toNextLevel - experience < 0 -> level up
+	public void levelUp()  // TODO if toNextLevel - experience < 0 -> level up
 	{
 		this.experience -= this.toNextLevel;
 		this.level++;
 		this.toNextLevel = this.level * 1000 + (this.level - 1) * (this.level - 1) * 450;
-		// this.attack += 5;
-		// this.defense += 5;
-		// this.hitPoints += 50;
+		this.attack += this.multAtk;
+		this.defense += this.multDef;
+		this.hitPoints += this.multHp;
 	}
 
 	public static class Builder
@@ -104,11 +135,22 @@ public class Player extends Entity {
 
 		public Player	build()
 		{
-			//TODO: calcul stats player with level
-			this.attack = 10;
-			this.defense = 10;
-			this.hitPoints = 50;
-            return (new Player(this));
+			this.attack = 9;
+			this.defense = 11;
+			this.hitPoints = 110;
+			if (this.heroClass.equals("Warrior"))
+			{
+				this.attack = 12;
+				this.defense = 10;
+				this.hitPoints = 100;
+			}
+			else if (this.heroClass.equals("Mage"))
+			{
+				this.attack = 10;
+				this.defense = 8;
+				this.hitPoints = 90;
+			}
+			return (new Player(this));
         }
 	}
 }

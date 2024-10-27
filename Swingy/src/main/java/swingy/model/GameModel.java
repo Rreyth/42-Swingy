@@ -128,6 +128,21 @@ public class GameModel
 	}
 
 	//METHODS
+	public int[]	getPlayerStats() //TODO: add artifact stats
+	{
+		int	lvl = this.player.getLevel();
+
+		int toNextLvl = this.player.getToNextLevel();
+		int exp = this.player.getExperience();
+		int	lvlPercentage = (int)(((double) exp / toNextLvl) * 100);
+
+		int	atk = this.player.getAttack();
+		int	def = this.player.getDefense();
+		int	hp = this.player.getHitPoints();
+
+		return (new int[]{lvl, lvlPercentage, atk, def, hp});
+	}
+
 	private void	saveToFile()
 	{
 		String	path = "Swingy/src/main/java/swingy/model/save/saveFile";

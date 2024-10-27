@@ -10,10 +10,19 @@ import java.util.List;
 
 public class GameView {
 	private String	mode;
+	private String	playerName;
+	private String	playerClass;
 
 	public	GameView(String p_mode)
 	{
 		this.mode = p_mode;
+	}
+
+
+	public void	initPlayerVisual(String name, String heroClass)
+	{
+		this.playerName = name;
+		this.playerClass = heroClass;
 	}
 
 
@@ -41,6 +50,22 @@ public class GameView {
 			}
 			Print.print(line);
 		}
+	}
+
+
+	public void	displayStats(int[] stats) //TODO: update with artifact
+	{
+		Print.print("");
+		if (this.playerName.length() < 8)
+			Print.print(this.playerName + "\t\t\t(" + this.playerClass + ")");
+		else if (this.playerName.length() > 15)
+			Print.print(this.playerName + "\t(" + this.playerClass + ")");
+		else
+			Print.print(this.playerName + "\t\t(" + this.playerClass + ")");
+		Print.print("level:\t\t" + stats[0] + "\t(" + stats[1] + " %)");
+		Print.print("Attack:\t\t" + stats[2] + "\t(base + artifact)");
+		Print.print("Defense:\t" + stats[3] + "\t(base + artifact)");
+		Print.print("Hitpoints:\t" + stats[4] + "\t(base + artifact)");
 	}
 
 
