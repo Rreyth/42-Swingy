@@ -43,7 +43,7 @@ public class GameView {
 				tile = map.getTile(x, y);
 				if (tile.hasPlayer())
 					line += "[P]";
-				else if (tile.isOccupied()) //TODO : REMOVE
+				else if (tile.isOccupied()) //TODO: add (&& tile.isVisited())
 					line += "[O]";
 				else if (tile.isVisited())
 					line += "[X]";

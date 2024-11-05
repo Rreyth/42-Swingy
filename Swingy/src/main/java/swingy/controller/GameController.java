@@ -5,12 +5,13 @@ import swingy.view.GameView;
 import swingy.model.GameModel;
 import swingy.model.map.GameMap;
 import swingy.model.entity.Player;
+import swingy.model.entity.Villain;
 import swingy.controller.generators.MapGenerator;
 
+import java.util.random.RandomGenerator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 
 public class GameController
 {
@@ -19,6 +20,8 @@ public class GameController
 	private boolean			isRunning;
 	private boolean			isFighting;
 	private List<String>	moveList;
+
+	private	RandomGenerator randomGen = RandomGenerator.of("Random");
 
 	public GameController(GameModel model, GameView view)
 	{
@@ -106,14 +109,23 @@ public class GameController
 	}
 
 
-	private void	gameLoop()
+	private void	gameLoop() //TODO: replace every print with a call to view
 	{
-		while (this.isRunning) { // while player is alive or quit.
+		Villain villain = null;
+
+		while (this.isRunning)
+		{
 			this.view.display(this.model.getGameMap());
 			Print.print("\nWhere do you want to go?\t(North/South/East/West)(stats/save/switch/quit)");
 			inputHandler(this.view.getInput().toLowerCase());
-			//TODO: check player pos for encounter -> ded -> isRunning = false -> erase save
-
+			if (!this.isRunning)
+				break;
+			villain = this.model.getGameMap().villainEncounter();
+			if (villain != null)
+			{
+				this.fightLoop(villain);
+				villain = null;
+			}
 			if (this.model.getGameMap().isFinished())
 			{
 				this.view.display(this.model.getGameMap());
@@ -127,11 +139,103 @@ public class GameController
 	}
 
 
+	private void	fightLoop(Villain villain)
+	{
+		Print.print("You encounter a level " + villain.getLevel() + " " + villain.getName() + ".");
+		this.isFighting = true;
+		while (this.isFighting && this.isRunning)
+		{
+			Print.print("\nWhat do you want to do?\t(Fight/Run)");
+			inputHandler(this.view.getInput().toLowerCase());
+		}
+	}
+
+
+	private void	fightHandler()
+	{
+		Villain	villain;
+		Player	player;
+		int		atk;
+		int		def;
+		int		hp;
+
+		villain = this.model.getGameMap().villainEncounter();
+		player = this.model.getPlayer();
+
+		while (player.getHitPoints() > 0 && villain.getHitPoints() > 0)
+		{
+			// player attack
+			atk = player.getAttack();
+			def = villain.getDefense();
+			hp = villain.getHitPoints();
+
+			hp -= (atk - def);
+			villain.setHitPoints(hp);
+			if (hp <= 0)
+				break;
+
+			// villain attack
+			atk = villain.getAttack();
+			def = player.getDefense();
+			hp = player.getHitPoints();
+
+			hp -= (atk - def);
+			player.setHitPoints(hp);
+			if (hp <= 0)
+				break;
+		}
+
+		this.isFighting = false;
+
+		if (villain.getHitPoints() <= 0)
+		{
+			// TODO
+			Print.print("You have won the battle against this level " + villain.getLevel() + " " + villain.getName() + ".\nCongratulations!");
+			// You have gained 1200 XP
+			// You have gained 1200 experience points
+			// xp gain -> lvl up ?
+			// loot
+		}
+		else if (player.getHitPoints() <= 0)
+		{
+			// TODO
+			Print.print("You have lost the battle against this level " + villain.getLevel() + " " + villain.getName() + ".\nThis is the end of the game for this hero. Better luck next time.");
+			// erase save
+			// guit game
+			this.isRunning = false;
+		}
+	}
+
+
 	private void	inputHandler(String input)
 	{
 		Print.print("\nInput handler = " + input); //TODO: RM
 
-		if (input.equals("quit"))
+		if (this.isFighting)
+		{
+			if (input.equals("fight"))
+			{
+				Print.print("You decide to fight.");
+				this.fightHandler();
+			}
+			else if (input.equals("run"))
+			{
+				if (this.randomGen.nextInt(2) == 0) // Run success
+				{
+					Print.print("Your escape from the villain was successful");
+					this.isFighting = false;
+					this.model.getGameMap().undoLastMove();
+				}
+				else // Run failure
+				{
+					Print.print("You failed to escape");
+					this.fightHandler();
+				}
+			}
+			else
+				Print.print("\nError: Only fight and run are available during an encounter");
+		}
+		else if (input.equals("quit"))
 			quitGame();
 		else if (input.equals("switch"))
 			view.switchMode();
@@ -141,17 +245,8 @@ public class GameController
 			this.view.displayStats(this.model.getPlayerStats());
 		else if (this.moveList.contains(input))
 			this.model.getGameMap().movePlayer(input);
-		else if (isFighting) // TODO
-		{
-			if (input.equals("fight"))
-				Print.print("fight"); //TODO
-			else if (input.equals("run"))
-				Print.print("run"); //TODO : 50% chance
-		}
 		else
-		{
 			Print.print("\nError: Unknown command");
-		}
 	}
 
 

@@ -1,6 +1,7 @@
 package swingy.model.map;
 
 import swingy.model.map.Tile;
+import swingy.model.entity.Villain;
 
 public class GameMap
 {
@@ -9,6 +10,7 @@ public class GameMap
 	private int			playerX;
 	private int			playerY;
 	private boolean		isFinished;
+	private	String		lastMove;
 
 	public GameMap(int size)
 	{
@@ -17,6 +19,7 @@ public class GameMap
 		this.playerX = 0;
 		this.playerY = 0;
 		this.isFinished = false;
+		this.lastMove = "";
 	}
 
 	public Tile	getTile(int x, int y)
@@ -72,6 +75,7 @@ public class GameMap
 
 	public void	movePlayer(String dir)
 	{
+		this.lastMove = dir;
 		this.map[this.playerX][this.playerY].setPlayerHere(false);
 		this.map[this.playerX][this.playerY].setVisited(true);
 		switch (dir)
@@ -97,5 +101,22 @@ public class GameMap
 		if (this.playerX == 0 || this.playerX == this.size - 1
 				|| this.playerY == 0 || this.playerY == this.size - 1)
 			this.isFinished = true;
+	}
+
+	public void	undoLastMove()
+	{
+		if (this.lastMove.equals("north"))
+			this.movePlayer("south");
+		else if (this.lastMove.equals("south"))
+			this.movePlayer("north");
+		else if (this.lastMove.equals("east"))
+			this.movePlayer("west");
+		else
+			this.movePlayer("east");
+	}
+
+	public Villain	villainEncounter()
+	{
+		return (this.map[this.playerX][this.playerY].getVillain());
 	}
 }

@@ -30,7 +30,6 @@ public class VillainGenerator {
 		Villain newVillain;
 
 		lvl = this.randomGen.nextInt(playerLevel, playerLevel + 5);
-		System.out.println(lvl);
 		//TODO: chose Villain between multiple possibilities
 		//TODO: stats computing in Villain class
 		atk = 8 + ((lvl - 1) * 4);
