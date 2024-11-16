@@ -119,4 +119,10 @@ public class GameMap
 	{
 		return (this.map[this.playerX][this.playerY].getVillain());
 	}
+
+	public void	villainDefeat()
+	{
+		this.map[this.playerX][this.playerY].setOccupied(false);
+		this.map[this.playerX][this.playerY].setVillain(null);
+	}
 }

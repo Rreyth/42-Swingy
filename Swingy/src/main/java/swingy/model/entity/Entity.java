@@ -29,6 +29,7 @@ public class Entity
 
 	@Min(value = 1, message = "Hit Points cannot be less than 1")
 	protected int hitPoints;
+	protected int maxHitPoints;
 
 	protected Artifact weapon;
 	protected Artifact armor;
@@ -43,6 +44,7 @@ public class Entity
 		this.attack = p_attack;
 		this.defense = p_defense;
 		this.hitPoints = p_hitPoints;
+		this.maxHitPoints = p_hitPoints;
 		this.weapon = p_weapon;
 		this.armor = p_armor;
 		this.helm = p_helm;
@@ -82,6 +84,11 @@ public class Entity
 	public int getHitPoints()
 	{
 		return hitPoints;
+	}
+
+	public int getMaxHitPoints()
+	{
+		return maxHitPoints;
 	}
 
 	public Artifact getWeapon()

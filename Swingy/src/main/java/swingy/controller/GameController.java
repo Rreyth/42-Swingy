@@ -169,7 +169,7 @@ public class GameController
 			def = villain.getDefense();
 			hp = villain.getHitPoints();
 
-			hp -= (atk - def);
+			hp -= Math.max(1, ((atk * atk) / (atk + def)));
 			villain.setHitPoints(hp);
 			if (hp <= 0)
 				break;
@@ -179,7 +179,7 @@ public class GameController
 			def = player.getDefense();
 			hp = player.getHitPoints();
 
-			hp -= (atk - def);
+			hp -= Math.max(1, ((atk * atk) / (atk + def)));
 			player.setHitPoints(hp);
 			if (hp <= 0)
 				break;
@@ -189,12 +189,19 @@ public class GameController
 
 		if (villain.getHitPoints() <= 0)
 		{
-			// TODO
-			Print.print("You have won the battle against this level " + villain.getLevel() + " " + villain.getName() + ".\nCongratulations!");
-			// You have gained 1200 XP
-			// You have gained 1200 experience points
-			// xp gain -> lvl up ?
-			// loot
+			int	villainLevel = villain.getLevel();
+			int	gainedXp;
+
+			player.setHitPoints(player.getMaxHitPoints());
+			Print.print("You have won the battle against this level " + villainLevel + " " + villain.getName() + ".\nCongratulations!");
+			this.model.getGameMap().villainDefeat();
+
+			gainedXp = villainLevel * 750 + (villainLevel - 1) * (villainLevel - 1) * 400;
+			Print.print("You have gained " + gainedXp + " experience points.");
+			if (player.gainExperience(gainedXp))
+				Print.print("LEVEL UP! You are now level " + player.getLevel() + ".");
+
+			// TODO: loot artifact
 		}
 		else if (player.getHitPoints() <= 0)
 		{

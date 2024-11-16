@@ -32,8 +32,8 @@ public class VillainGenerator {
 		lvl = this.randomGen.nextInt(playerLevel, playerLevel + 5);
 		//TODO: chose Villain between multiple possibilities
 		//TODO: stats computing in Villain class
-		atk = 8 + ((lvl - 1) * 4);
-		def = 7 + ((lvl - 1) * 3);
+		atk = 6 + ((lvl - 1) * 3);
+		def = 5 + ((lvl - 1) * 3);
 		hp = 80 + ((lvl - 1) * 10);
 		newVillain = new Bandit("Bandit", lvl, 0, atk, def, hp);
 		return (newVillain);
@@ -41,8 +41,8 @@ public class VillainGenerator {
 }
 
 // bandit stats
-// Atk : 8 + (lvl * 4)
-// Def : 7 + (lvl * 3)
+// Atk : 6 + (lvl * 3)
+// Def : 5 + (lvl * 3)
 // Hp : 80 + (lvl * 10)
 // goblins are weaker
 // need smth stronger too -> werewolf ?

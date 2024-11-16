@@ -50,6 +50,7 @@ public class Player extends Entity {
 		this.attack = startAtk + ((this.level - 1) * this.multAtk);
 		this.defense = startDef + ((this.level - 1) * this.multDef);
 		this.hitPoints = startHp + ((this.level - 1) * this.multHp);
+		this.maxHitPoints = this.hitPoints;
 	}
 
 	public String getHeroClass()
@@ -67,14 +68,27 @@ public class Player extends Entity {
 		this.toNextLevel = p_toNextLevel;
 	}
 
-	public void levelUp()  // TODO if toNextLevel - experience < 0 -> level up
+	public void levelUp()
 	{
 		this.experience -= this.toNextLevel;
 		this.level++;
 		this.toNextLevel = this.level * 1000 + (this.level - 1) * (this.level - 1) * 450;
 		this.attack += this.multAtk;
 		this.defense += this.multDef;
-		this.hitPoints += this.multHp;
+		this.maxHitPoints += this.multHp;
+		this.hitPoints = this.maxHitPoints;
+	}
+
+	public boolean	gainExperience(int gainedXp)
+	{
+		this.experience += gainedXp;
+
+		if (this.experience >= this.toNextLevel)
+		{
+			this.levelUp();
+			return (true);
+		}
+		return (false);
 	}
 
 	public static class Builder
