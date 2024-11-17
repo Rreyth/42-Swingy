@@ -194,4 +194,10 @@ public class GameModel
 		this.save();
 		this.saveToFile();
 	}
+
+	public void	loseQuit()
+	{
+		this.saves.remove(player.getName());
+		this.saveToFile();
+	}
 }

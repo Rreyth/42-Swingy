@@ -108,7 +108,6 @@ public class GameController
 		}
 	}
 
-
 	private void	gameLoop() //TODO: replace every print with a call to view
 	{
 		Villain villain = null;
@@ -126,7 +125,7 @@ public class GameController
 				this.fightLoop(villain);
 				villain = null;
 			}
-			if (this.model.getGameMap().isFinished())
+			if (this.model.getGameMap().isFinished() && this.isRunning)
 			{
 				this.view.display(this.model.getGameMap());
 				Print.print("\nYou have successfully completed the current map!");
@@ -138,7 +137,6 @@ public class GameController
 		}
 	}
 
-
 	private void	fightLoop(Villain villain)
 	{
 		Print.print("You encounter a level " + villain.getLevel() + " " + villain.getName() + ".");
@@ -149,7 +147,6 @@ public class GameController
 			inputHandler(this.view.getInput().toLowerCase());
 		}
 	}
-
 
 	private void	fightHandler()
 	{
@@ -181,8 +178,6 @@ public class GameController
 
 			hp -= Math.max(1, ((atk * atk) / (atk + def)));
 			player.setHitPoints(hp);
-			if (hp <= 0)
-				break;
 		}
 
 		this.isFighting = false;
@@ -205,19 +200,13 @@ public class GameController
 		}
 		else if (player.getHitPoints() <= 0)
 		{
-			// TODO
 			Print.print("You have lost the battle against this level " + villain.getLevel() + " " + villain.getName() + ".\nThis is the end of the game for this hero. Better luck next time.");
-			// erase save
-			// guit game
-			this.isRunning = false;
+			this.loseQuit();
 		}
 	}
 
-
 	private void	inputHandler(String input)
 	{
-		Print.print("\nInput handler = " + input); //TODO: RM
-
 		if (this.isFighting)
 		{
 			if (input.equals("fight"))
@@ -256,11 +245,18 @@ public class GameController
 			Print.print("\nError: Unknown command");
 	}
 
-
 	private	void	quitGame()
 	{
 		Print.print("\nQuitting game");
 		this.model.quitGame();
+		this.isRunning = false;
+	}
+
+	private void	loseQuit()
+	{
+		Print.print("\nDeleting hero save");
+		// this.model.loseQuit(); //TODO: commented for testing
+		Print.print("\nQuitting game");
 		this.isRunning = false;
 	}
 }
