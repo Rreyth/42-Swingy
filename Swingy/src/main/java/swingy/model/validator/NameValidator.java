@@ -1,16 +1,13 @@
 package swingy.model.validator;
 
-import swingy.model.validator.ValidName;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-
-public class NameValidator implements ConstraintValidator<ValidName, String> {
+public class NameValidator implements ConstraintValidator<ValidName, String>
+{
 
 	@Override
-	public void initialize(ValidName constraintAnnotation) {
-	}
+	public void initialize(ValidName constraintAnnotation) {}
 
 	@Override
 	public boolean isValid(String name, ConstraintValidatorContext context)

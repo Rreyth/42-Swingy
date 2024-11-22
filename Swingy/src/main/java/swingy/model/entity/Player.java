@@ -1,14 +1,19 @@
 package swingy.model.entity;
 
-import swingy.model.entity.Entity;
-import swingy.model.artifact.Artifact;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
-public class Player extends Entity {
+import swingy.model.artifact.Armor;
+import swingy.model.artifact.Artifact;
+import swingy.model.artifact.Helm;
+import swingy.model.artifact.Weapon;
+
+public class Player extends Entity
+{
 
 	@NotNull(message = "Hero class cannot be null")
 	@Pattern(regexp = "^(Warrior|Mage|Monk)$", message = "Error: Hero class must be Warrior, Mage or Monk")
-	private String heroClass;
+	private final String heroClass;
 
 	private int	toNextLevel;
 	private int	multAtk;
@@ -91,18 +96,28 @@ public class Player extends Entity {
 		return (false);
 	}
 
+	public void	equipLoot(Artifact loot)
+	{
+        if (loot instanceof Weapon)
+			this.setWeapon((Weapon) loot);
+		else if (loot instanceof Helm)
+			this.setHelm((Helm) loot);
+		else if (loot instanceof Armor)
+			this.setArmor((Armor) loot);
+	}
+
 	public static class Builder
 	{
-		private String		name;
-		private String		heroClass;
-		private int			level;
-		private int			experience;
-		private Artifact	weapon;
-		private Artifact	armor;
-		private Artifact	helm;
-		private int			attack;
-		private int			defense;
-		private int			hitPoints;
+		private String	name;
+		private String	heroClass;
+		private int		level;
+		private int		experience;
+		private Weapon	weapon;
+		private Armor	armor;
+		private Helm	helm;
+		private int		attack;
+		private int		defense;
+		private int		hitPoints;
 
 
 		public Builder	setName(String name)
@@ -129,19 +144,19 @@ public class Player extends Entity {
 			return (this);
 		}
 
-		public Builder	setWeapon(Artifact weapon)
+		public Builder	setWeapon(Weapon weapon)
 		{
 			this.weapon = weapon;
 			return (this);
 		}
 
-		public Builder	setArmor(Artifact armor)
+		public Builder	setArmor(Armor armor)
 		{
 			this.armor = armor;
 			return (this);
 		}
 
-		public Builder	setHelm(Artifact helm)
+		public Builder	setHelm(Helm helm)
 		{
 			this.helm = helm;
 			return (this);

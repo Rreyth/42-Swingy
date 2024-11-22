@@ -1,9 +1,9 @@
 package swingy.model.artifact;
 
-import swingy.model.artifact.Artifact;
-
-public class Weapon extends Artifact {
-	public Weapon(String name, int attack) {
-		super(name, attack, 0, 0);
+public class Weapon extends Artifact
+{
+	public Weapon(String type, int attack, int quality)
+	{
+		super(type, attack, 0, 0, quality);
 	}
 }

@@ -4,8 +4,8 @@ import swingy.model.entity.Villain;
 
 public class Tile
 {
-	private int		x;
-	private int		y;
+	private final int		x;
+	private final int		y;
 	private boolean	occupied;
 	private boolean	visited;
 	private boolean	playerHere;

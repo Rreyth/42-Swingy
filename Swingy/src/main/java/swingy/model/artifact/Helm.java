@@ -1,9 +1,9 @@
 package swingy.model.artifact;
 
-import swingy.model.artifact.Artifact;
-
-public class Helm extends Artifact {
-	public Helm(String name, int hitPoints) {
-		super(name, 0, 0, hitPoints);
+public class Helm extends Artifact
+{
+	public Helm(String type, int hitPoints, int quality)
+	{
+		super(type, 0, 0, hitPoints, quality);
 	}
 }

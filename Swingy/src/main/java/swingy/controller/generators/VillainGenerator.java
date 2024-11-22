@@ -1,14 +1,11 @@
 package swingy.controller.generators;
 
-import swingy.model.entity.Villain;
 import swingy.model.entity.Bandit;
+import swingy.model.entity.Villain;
 
-import java.util.random.RandomGenerator;
-
-
-public class VillainGenerator {
+public class VillainGenerator
+{
 	private static VillainGenerator instance = null;
-	private	RandomGenerator randomGen = RandomGenerator.of("Random");
 
 	private VillainGenerator() {}
 
@@ -29,7 +26,7 @@ public class VillainGenerator {
 		int		hp;
 		Villain newVillain;
 
-		lvl = this.randomGen.nextInt(playerLevel, playerLevel + 5);
+		lvl = RandGenerator.getInstance().randInt(playerLevel, playerLevel + 5);
 		//TODO: chose Villain between multiple possibilities
 		//TODO: stats computing in Villain class
 		atk = 6 + ((lvl - 1) * 3);

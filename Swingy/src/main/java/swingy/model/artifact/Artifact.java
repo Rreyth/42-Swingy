@@ -1,7 +1,7 @@
 package swingy.model.artifact;
 
-public class Artifact {
-	private String name; // mehhh
+public class Artifact
+{
 	private int attack;
 	private int defense;
 	private int hitPoints;
@@ -9,44 +9,64 @@ public class Artifact {
 	private String type;
 	private int quality;
 
-	public Artifact(String p_name, int p_attack, int p_defense, int p_hitPoints) {
-		this.name = p_name;
+	public Artifact(String p_type, int p_attack, int p_defense, int p_hitPoints, int quality)
+	{
+		this.type = p_type;
 		this.attack = p_attack;
 		this.defense = p_defense;
 		this.hitPoints = p_hitPoints;
+		this.quality = quality;
 	}
 
 	//GETTERS
-	public String getName() {
-		return name;
+	public String getType()
+	{
+		return (this.type);
 	}
 
-	public int getAttack() {
-		return attack;
+	public int getAttack()
+	{
+		return (this.attack);
 	}
 
-	public int getDefense() {
-		return defense;
+	public int getDefense()
+	{
+		return (this.defense);
 	}
 
-	public int getHitPoints() {
-		return hitPoints;
+	public int getHitPoints()
+	{
+		return (this.hitPoints);
+	}
+
+	public int	getQuality()
+	{
+		return (this.quality);
 	}
 
 	//SETTERS
-	public void setName(String p_name) {
-		this.name = p_name;
+	public void setType(String p_type)
+	{
+		this.type = p_type;
 	}
 
-	public void setAttack(int p_attack) {
+	public void setAttack(int p_attack)
+	{
 		this.attack = p_attack;
 	}
 
-	public void setDefense(int p_defense) {
+	public void setDefense(int p_defense)
+	{
 		this.defense = p_defense;
 	}
 
-	public void setHitPoints(int p_hitPoints) {
+	public void setHitPoints(int p_hitPoints)
+	{
 		this.hitPoints = p_hitPoints;
+	}
+
+	public void	setQuality(int p_quality)
+	{
+		this.quality = p_quality;
 	}
 }

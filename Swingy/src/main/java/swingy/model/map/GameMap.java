@@ -1,11 +1,10 @@
 package swingy.model.map;
 
-import swingy.model.map.Tile;
 import swingy.model.entity.Villain;
 
 public class GameMap
 {
-	private Tile[][]	map;
+	private final Tile[][]	map;
 	private int			size;
 	private int			playerX;
 	private int			playerY;
@@ -105,14 +104,21 @@ public class GameMap
 
 	public void	undoLastMove()
 	{
-		if (this.lastMove.equals("north"))
-			this.movePlayer("south");
-		else if (this.lastMove.equals("south"))
-			this.movePlayer("north");
-		else if (this.lastMove.equals("east"))
-			this.movePlayer("west");
-		else
-			this.movePlayer("east");
+		switch (this.lastMove)
+		{
+			case "north":
+				this.movePlayer("south");
+				break;
+			case "south":
+				this.movePlayer("north");
+				break;
+			case "east":
+				this.movePlayer("west");
+				break;
+			default:
+				this.movePlayer("east");
+				break;
+		}
 	}
 
 	public Villain	villainEncounter()

@@ -1,14 +1,13 @@
 package swingy.view;
 
-import swingy.model.map.Tile;
-import swingy.model.map.GameMap;
-
-import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.List;
 
+import swingy.model.artifact.Artifact;
+import swingy.model.map.GameMap;
+import swingy.model.map.Tile;
 
-public class GameView {
+public class GameView
+{
 	private String	mode;
 	private String	playerName;
 	private String	playerClass;
@@ -18,13 +17,11 @@ public class GameView {
 		this.mode = p_mode;
 	}
 
-
 	public void	initPlayerVisual(String name, String heroClass)
 	{
 		this.playerName = name;
 		this.playerClass = heroClass;
 	}
-
 
 	public void	display(GameMap map) //TODO: MAKE FCT FOR CONSOLE AND GUI
 	{
@@ -54,8 +51,7 @@ public class GameView {
 		}
 	}
 
-
-	public void	displayStats(int[] stats) //TODO: update with artifact
+	public void	displayStats(int[] stats) //TODO: update with artifact // TODO: reiceive Player ?
 	{
 		Print.print("");
 		if (this.playerName.length() < 8)
@@ -70,6 +66,15 @@ public class GameView {
 		Print.print("Hitpoints:\t" + stats[4] + "\t(base + artifact)");
 	}
 
+	public void	displayLoot(Artifact loot)
+	{
+		String[] quality = {"weathered", "fragile", "acceptable", "excellent", "pristine"};
+		Print.print("\nYou dropped a " + quality[loot.getQuality()] + " " + loot.getType()+ "!");
+		Print.print("Stats:");
+		Print.print("Attack:\t\t" + loot.getAttack());
+		Print.print("Defense:\t" + loot.getDefense());
+		Print.print("Hit points:\t" + loot.getHitPoints());
+	}
 
 	public String	getInput()
 	{
@@ -84,7 +89,6 @@ public class GameView {
 		// return inputs;
 	}
 
-
 	public void	switchMode()
 	{
 		if (this.mode.equals("console")) {
@@ -97,18 +101,15 @@ public class GameView {
 		}
 	}
 
-
 	public String	getMode()
 	{
 		return this.mode;
 	}
 
-
 	public void	setMode(String p_mode)
 	{
 		this.mode = p_mode;
 	}
-
 
 	public String[]	heroSelect()
 	{
@@ -119,28 +120,28 @@ public class GameView {
 				Print.print("\nLoad or create a Hero?\t(load / create)");
 				Scanner scanner = new Scanner(System.in);
 				String input = scanner.nextLine().toLowerCase();
-				if (input.equals("create"))
+				switch (input)
 				{
-					Print.print("\nPlease enter a hero name");
-					input = scanner.nextLine();
-					return (new String[]{"create", input});
+					case "create":
+						Print.print("\nPlease enter a hero name");
+						input = scanner.nextLine();
+						return (new String[]{"create", input});
+					case "load":
+						Print.print("\nEnter the name of the hero you want to load");
+						input = scanner.nextLine();
+						return (new String[]{"load", input});
+					case "quit":
+						return (new String[]{input});
+					case "switch":
+						this.switchMode();
+						break;
+					default:
+						Print.print("\nError: Unknown command\n");
+						break;
 				}
-				else if (input.equals("load"))
-				{
-					Print.print("\nEnter the name of the hero you want to load");
-					input = scanner.nextLine();
-					return (new String[]{"load", input});
-				}
-				else if (input.equals("quit"))
-					return (new String[]{input});
-				else if (input.equals("switch"))
-					this.switchMode();
-				else
-					Print.print("\nError: Unknown command\n");
 			}
 		}
 	}
-
 
 	public String classSelect()
 	{

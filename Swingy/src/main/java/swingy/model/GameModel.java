@@ -1,27 +1,25 @@
 package swingy.model;
 
-import swingy.model.SaveData;
-import swingy.model.map.GameMap;
-import swingy.model.entity.Player;
-
-// File and gson imports used for save
 import java.io.File;
-import java.util.Map;
-import java.util.TreeMap;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import com.google.gson.Gson;
 import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-// Validator imports
-import java.util.Set;
-import javax.validation.Validator;
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
-import javax.validation.ConstraintViolation;
+import swingy.model.entity.Player;
+import swingy.model.map.GameMap;
 
 public class GameModel
 {
@@ -73,7 +71,7 @@ public class GameModel
 	public boolean	createPlayer(String name, String heroClass)
 	{
 		heroClass = heroClass.substring(0, 1).toUpperCase() + heroClass.substring(1);
-		Player player = new Player.Builder()
+		Player tmpPlayer = new Player.Builder()
 						.setName(name)
 						.setHeroClass(heroClass)
 						.setLevel(1)
@@ -86,7 +84,7 @@ public class GameModel
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
 
-		Set<ConstraintViolation<Player>> violations = validator.validate(player);
+		Set<ConstraintViolation<Player>> violations = validator.validate(tmpPlayer);
 
 		if (!violations.isEmpty())
 		{
@@ -94,7 +92,7 @@ public class GameModel
 				System.out.println(violation.getMessage());
 			return (false);
 		}
-		this.player = player;
+		this.player = tmpPlayer;
 		return (true);
 	}
 
@@ -102,7 +100,7 @@ public class GameModel
 	{
 		SaveData	playerData = this.saves.get(name);
 
-		Player player = new Player.Builder() //TODO : add artifacts
+		Player tmpPlayer = new Player.Builder() //TODO : add artifacts
 						.setName(playerData.getName())
 						.setHeroClass(playerData.getHeroClass())
 						.setLevel(playerData.getLvl())
@@ -115,7 +113,7 @@ public class GameModel
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
 
-		Set<ConstraintViolation<Player>> violations = validator.validate(player);
+		Set<ConstraintViolation<Player>> violations = validator.validate(tmpPlayer);
 
 		if (!violations.isEmpty())
 		{
@@ -123,7 +121,7 @@ public class GameModel
 				System.out.println(violation.getMessage());
 			return (false);
 		}
-		this.player = player;
+		this.player = tmpPlayer;
 		return (true);
 	}
 

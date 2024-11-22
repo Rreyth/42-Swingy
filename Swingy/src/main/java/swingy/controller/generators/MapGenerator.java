@@ -1,17 +1,15 @@
 package swingy.controller.generators;
 
-import swingy.model.map.Tile;
-import swingy.model.map.GameMap;
-import swingy.model.entity.Villain;
-
-import java.util.List;
 import java.util.ArrayList;
-import java.util.random.RandomGenerator;
+import java.util.List;
+
+import swingy.model.entity.Villain;
+import swingy.model.map.GameMap;
+import swingy.model.map.Tile;
 
 public class MapGenerator
 {
 	private static MapGenerator	instance = null;
-	private	RandomGenerator randomGen = RandomGenerator.of("Random");
 
 	private MapGenerator() {}
 
@@ -91,8 +89,8 @@ public class MapGenerator
 		int	x;
 		int	y;
 
-		x = this.randomGen.nextInt(max);
-		y = this.randomGen.nextInt(max);
+		x = RandGenerator.getInstance().randInt(0, max);
+		y = RandGenerator.getInstance().randInt(0, max);
 
 		return (new int[]{x, y});
 	}
