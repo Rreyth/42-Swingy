@@ -58,57 +58,78 @@ public class Entity
 	//GETTERS
 	public String getName()
 	{
-		return name;
+		return (this.name);
 	}
 
 	public String getType()
 	{
-		return type;
+		return (this.type);
 	}
 
 	public int getLevel()
 	{
-		return level;
+		return (this.level);
 	}
 
 	public int getExperience()
 	{
-		return experience;
+		return (this.experience);
 	}
 
 	public int getAttack()
 	{
-		return attack;
+		return (this.attack);
+	}
+
+	public int getFullAttack()
+	{
+		if (this.weapon == null)
+			return (this.attack);
+		return (this.attack + this.weapon.getAttack());
 	}
 
 	public int getDefense()
 	{
-		return defense;
+		return (this.defense);
+	}
+
+	public int getFullDefense()
+	{
+		if (this.armor == null)
+			return (this.defense);
+		return (this.defense + this.armor.getDefense());
 	}
 
 	public int getHitPoints()
 	{
-		return hitPoints;
+		return (this.hitPoints);
+	}
+
+	public int getFullHitPoints()
+	{
+		if (this.helm == null)
+			return (this.hitPoints);
+		return (this.hitPoints + this.helm.getHitPoints());
 	}
 
 	public int getMaxHitPoints()
 	{
-		return maxHitPoints;
+		return (this.maxHitPoints);
 	}
 
 	public Artifact getWeapon()
 	{
-		return weapon;
+		return (this.weapon);
 	}
 
 	public Artifact getArmor()
 	{
-		return armor;
+		return (this.armor);
 	}
 
 	public Artifact getHelm()
 	{
-		return helm;
+		return (this.helm);
 	}
 
 	//SETTERS

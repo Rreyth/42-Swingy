@@ -3,6 +3,7 @@ package swingy.view;
 import java.util.Scanner;
 
 import swingy.model.artifact.Artifact;
+import swingy.model.entity.Player;
 import swingy.model.map.GameMap;
 import swingy.model.map.Tile;
 
@@ -51,7 +52,7 @@ public class GameView
 		}
 	}
 
-	public void	displayStats(int[] stats) //TODO: update with artifact // TODO: reiceive Player ?
+	public void	displayStats(Player player)
 	{
 		Print.print("");
 		if (this.playerName.length() < 8)
@@ -60,10 +61,28 @@ public class GameView
 			Print.print(this.playerName + "\t(" + this.playerClass + ")");
 		else
 			Print.print(this.playerName + "\t\t(" + this.playerClass + ")");
-		Print.print("level:\t\t" + stats[0] + "\t(" + stats[1] + " %)");
-		Print.print("Attack:\t\t" + stats[2] + "\t(base + artifact)");
-		Print.print("Defense:\t" + stats[3] + "\t(base + artifact)");
-		Print.print("Hitpoints:\t" + stats[4] + "\t(base + artifact)");
+
+		int	lvl = player.getLevel();
+
+		int toNextLvl = player.getToNextLevel();
+		int exp = player.getExperience();
+		int	lvlPercentage = (int)(((double) exp / toNextLvl) * 100);
+		Print.print("level:\t\t" + lvl + "\t(" + lvlPercentage + " %)");
+
+		int	stat = player.getFullAttack();
+		int baseStat = player.getAttack();
+		int artifactStat = stat - baseStat;
+		Print.print("Attack:\t\t" + stat + "\t(" + baseStat + " + " + artifactStat + ")");
+
+		stat = player.getFullDefense();
+		baseStat = player.getDefense();
+		artifactStat = stat - baseStat;
+		Print.print("Defense:\t" + stat + "\t(" + baseStat + " + " + artifactStat + ")");
+
+		stat = player.getFullHitPoints();
+		baseStat = player.getHitPoints();
+		artifactStat = stat - baseStat;
+		Print.print("Hitpoints:\t" + stat + "\t(" + baseStat + " + " + artifactStat + ")");
 	}
 
 	public void	displayLoot(Artifact loot)

@@ -208,9 +208,10 @@ public class GameController
 		while (player.getHitPoints() > 0 && villain.getHitPoints() > 0)
 		{
 			// player attack
-			atk = player.getAttack();
-			def = villain.getDefense();
-			hp = villain.getHitPoints();
+			atk = player.getFullAttack();
+			def = villain.getFullDefense();
+			hp = villain.getFullHitPoints();
+
 
 			hp -= Math.max(1, ((atk * atk) / (atk + def)));
 			villain.setHitPoints(hp);
@@ -218,9 +219,9 @@ public class GameController
 				break;
 
 			// villain attack
-			atk = villain.getAttack();
-			def = player.getDefense();
-			hp = player.getHitPoints();
+			atk = villain.getFullAttack();
+			def = player.getFullDefense();
+			hp = player.getFullHitPoints();
 
 			hp -= Math.max(1, ((atk * atk) / (atk + def)));
 			player.setHitPoints(hp);
@@ -289,7 +290,7 @@ public class GameController
 		else if (input.equals("save"))
 			this.model.save();
 		else if (input.equals("stats"))
-			this.view.displayStats(this.model.getPlayerStats());
+			this.view.displayStats(this.model.getPlayer());
 		else if (this.moveList.contains(input))
 			this.model.getGameMap().movePlayer(input);
 		else
