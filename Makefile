@@ -3,6 +3,9 @@ all: build
 build:
 	mvn -f Swingy clean package
 
+install:
+	mvn -f Swingy install
+
 gui:
 	java -jar Swingy/target/Swingy-1-jar-with-dependencies.jar gui
 
