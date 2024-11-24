@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -60,6 +62,28 @@ public class GameModel
 	public boolean	alreadyExist(String name)
 	{
 		return (this.saves.containsKey(name));
+	}
+
+	public List<Player>	getSavedHeroes()
+	{
+		List<Player>	savedHeroes = new ArrayList<>();
+		Player			tmpHero;
+
+		for (SaveData saved : this.saves.values()) {
+			tmpHero = new Player.Builder() //TODO : add artifacts
+						.setName(saved.getName())
+						.setHeroClass(saved.getHeroClass())
+						.setLevel(saved.getLvl())
+						.setExperience(saved.getExp())
+						.setWeapon(null)
+						.setArmor(null)
+						.setHelm(null)
+						.build();
+
+			savedHeroes.add(tmpHero);
+		}
+
+		return (savedHeroes);
 	}
 
 	//SETTERS

@@ -46,9 +46,6 @@ public class GameController
 		Player	player;
 		player = this.model.getPlayer();
 
-		this.view.initPlayerVisual(player.getName(),
-									player.getHeroClass());
-
 		int		playerLevel;
 		GameMap	map;
 
@@ -57,13 +54,15 @@ public class GameController
 		this.model.setGameMap(map);
 
 		Print.print("\nGame starts");
+		this.view.displayStats(this.model.getPlayer());
+
 		gameLoop();
 	}
 
 	private void	heroSelect()
 	{
 		String[] res;
-		res = this.view.heroSelect();
+		res = this.view.heroSelect(this.model.getSavedHeroes());
 
 		switch (res[0])
 		{

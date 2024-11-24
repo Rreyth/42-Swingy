@@ -1,5 +1,6 @@
 package swingy.view;
 
+import java.util.List;
 import java.util.Scanner;
 
 import swingy.model.artifact.Artifact;
@@ -10,18 +11,10 @@ import swingy.model.map.Tile;
 public class GameView
 {
 	private String	mode;
-	private String	playerName;
-	private String	playerClass;
 
 	public	GameView(String p_mode)
 	{
 		this.mode = p_mode;
-	}
-
-	public void	initPlayerVisual(String name, String heroClass)
-	{
-		this.playerName = name;
-		this.playerClass = heroClass;
 	}
 
 	public void	display(GameMap map) //TODO: MAKE FCT FOR CONSOLE AND GUI
@@ -55,12 +48,13 @@ public class GameView
 	public void	displayStats(Player player)
 	{
 		Print.print("");
-		if (this.playerName.length() < 8)
-			Print.print(this.playerName + "\t\t\t(" + this.playerClass + ")");
-		else if (this.playerName.length() > 15)
-			Print.print(this.playerName + "\t(" + this.playerClass + ")");
+		String name = player.getName();
+		if (name.length() < 8)
+			Print.print(name + "\t\t\t(" + player.getHeroClass() + ")");
+		else if (name.length() > 15)
+			Print.print(name + "\t(" + player.getHeroClass() + ")");
 		else
-			Print.print(this.playerName + "\t\t(" + this.playerClass + ")");
+			Print.print(name + "\t\t(" + player.getHeroClass() + ")");
 
 		int	lvl = player.getLevel();
 
@@ -130,7 +124,7 @@ public class GameView
 		this.mode = p_mode;
 	}
 
-	public String[]	heroSelect()
+	public String[]	heroSelect(List<Player> savedHeroes)
 	{
 		while (true)
 		{
@@ -146,6 +140,14 @@ public class GameView
 						input = scanner.nextLine();
 						return (new String[]{"create", input});
 					case "load":
+						Print.print("\nLoadable Heroes:");
+						if (savedHeroes.isEmpty())
+						{
+							Print.print("No hero saved.");
+							break;
+						}
+						for (Player hero : savedHeroes)
+							displayStats(hero);
 						Print.print("\nEnter the name of the hero you want to load");
 						input = scanner.nextLine();
 						return (new String[]{"load", input});
