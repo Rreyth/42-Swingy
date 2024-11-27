@@ -39,7 +39,6 @@ public class HibernateDB
 			Transaction transaction = session.beginTransaction();
 
 			for (SaveData hero : saves)
-				// session.persist(hero);
 				session.merge(hero);
 
 			transaction.commit();

@@ -3,7 +3,7 @@ package swingy.view;
 import java.util.List;
 import java.util.Scanner;
 
-import swingy.model.artifact.Artifact;
+import swingy.model.Artifact;
 import swingy.model.entity.Player;
 import swingy.model.map.GameMap;
 import swingy.model.map.Tile;
@@ -82,7 +82,7 @@ public class GameView
 	public void	displayLoot(Artifact loot)
 	{
 		String[] quality = {"weathered", "fragile", "acceptable", "excellent", "pristine"};
-		Print.print("\nYou dropped a " + quality[loot.getQuality()] + " " + loot.getType()+ "!");
+		Print.print("\nYou dropped an " + quality[loot.getQuality()] + " " + loot.getType()+ "!");
 		Print.print("Stats:");
 		Print.print("Attack:\t\t" + loot.getAttack());
 		Print.print("Defense:\t" + loot.getDefense());

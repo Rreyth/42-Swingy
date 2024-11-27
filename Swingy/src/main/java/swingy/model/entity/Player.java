@@ -3,10 +3,7 @@ package swingy.model.entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import swingy.model.artifact.Armor;
-import swingy.model.artifact.Artifact;
-import swingy.model.artifact.Helm;
-import swingy.model.artifact.Weapon;
+import swingy.model.Artifact;
 
 public class Player extends Entity
 {
@@ -75,13 +72,16 @@ public class Player extends Entity
 
 	public void levelUp()
 	{
-		this.experience -= this.toNextLevel;
-		this.level++;
-		this.toNextLevel = this.level * 1000 + (this.level - 1) * (this.level - 1) * 450;
-		this.attack += this.multAtk;
-		this.defense += this.multDef;
-		this.maxHitPoints += this.multHp;
-		this.hitPoints = this.maxHitPoints;
+		while (this.experience >= this.toNextLevel)
+		{
+			this.experience -= this.toNextLevel;
+			this.level++;
+			this.toNextLevel = this.level * 1000 + (this.level - 1) * (this.level - 1) * 450;
+			this.attack += this.multAtk;
+			this.defense += this.multDef;
+			this.maxHitPoints += this.multHp;
+			this.hitPoints = this.maxHitPoints;
+		}
 	}
 
 	public boolean	gainExperience(int gainedXp)
@@ -98,12 +98,19 @@ public class Player extends Entity
 
 	public void	equipLoot(Artifact loot)
 	{
-        if (loot instanceof Weapon)
-			this.setWeapon((Weapon) loot);
-		else if (loot instanceof Helm)
-			this.setHelm((Helm) loot);
-		else if (loot instanceof Armor)
-			this.setArmor((Armor) loot);
+		switch (loot.getType()) {
+			case "weapon":
+				this.setWeapon(loot);
+				break;
+			case "helm":
+				this.setHelm(loot);
+				break;
+			case "armor":
+				this.setArmor(loot);
+				break;
+			default:
+				break;
+		}
 	}
 
 	public static class Builder
@@ -112,9 +119,9 @@ public class Player extends Entity
 		private String	heroClass;
 		private int		level;
 		private int		experience;
-		private Weapon	weapon;
-		private Armor	armor;
-		private Helm	helm;
+		private Artifact	weapon;
+		private Artifact	armor;
+		private Artifact	helm;
 		private int		attack;
 		private int		defense;
 		private int		hitPoints;
@@ -144,19 +151,19 @@ public class Player extends Entity
 			return (this);
 		}
 
-		public Builder	setWeapon(Weapon weapon)
+		public Builder	setWeapon(Artifact weapon)
 		{
 			this.weapon = weapon;
 			return (this);
 		}
 
-		public Builder	setArmor(Armor armor)
+		public Builder	setArmor(Artifact armor)
 		{
 			this.armor = armor;
 			return (this);
 		}
 
-		public Builder	setHelm(Helm helm)
+		public Builder	setHelm(Artifact helm)
 		{
 			this.helm = helm;
 			return (this);

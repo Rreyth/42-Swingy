@@ -1,9 +1,6 @@
 package swingy.controller.generators;
 
-import swingy.model.artifact.Armor;
-import swingy.model.artifact.Artifact;
-import swingy.model.artifact.Helm;
-import swingy.model.artifact.Weapon;
+import swingy.model.Artifact;
 
 public class ArtifactGenerator
 {
@@ -31,23 +28,24 @@ public class ArtifactGenerator
 
 		rand = RandGenerator.getInstance().randInt(0, 3);
 
-		// TODO: sub type depends on class
+		// TODO: add names
+		// TODO: name depends on class
 
 		switch (rand)
 		{
 			case 0: // weapon
 				stat = (int)((7 + 3 * playerLevel) * qualityBonus);
-				loot = new Weapon("weapon", stat, levelDiff);
+				loot = new Artifact("weapon", stat, 0, 0, levelDiff);
 				break;
 
 			case 1: // armor
 				stat = (int)((6 + 4 * playerLevel) * qualityBonus);
-				loot = new Armor("armor", stat, levelDiff);
+				loot = new Artifact("armor", 0, stat, 0, levelDiff);
 				break;
 
 			default: //case 2 -> helm
 				stat = (int)((15 + 5 * playerLevel) * qualityBonus);
-				loot = new Helm("helmet", stat, levelDiff);
+				loot = new Artifact("helm", 0, 0, stat, levelDiff);
 		}
 
 		return (loot);

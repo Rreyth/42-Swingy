@@ -49,14 +49,14 @@ public class GameModel
 
 		for (SaveData saved : this.saves)
 		{
-			tmpHero = new Player.Builder() //TODO : add artifacts
+			tmpHero = new Player.Builder()
 						.setName(saved.getName())
 						.setHeroClass(saved.getHeroClass())
 						.setLevel(saved.getLvl())
 						.setExperience(saved.getExp())
-						.setWeapon(null)
-						.setArmor(null)
-						.setHelm(null)
+						.setWeapon(saved.getWeapon())
+						.setArmor(saved.getArmor())
+						.setHelm(saved.getHelm())
 						.build();
 
 			savedHeroes.add(tmpHero);
@@ -106,14 +106,14 @@ public class GameModel
 							.findFirst()
 							.orElse(null);
 
-		Player tmpPlayer = new Player.Builder() //TODO : add artifacts
+		Player tmpPlayer = new Player.Builder()
 						.setName(playerData.getName())
 						.setHeroClass(playerData.getHeroClass())
 						.setLevel(playerData.getLvl())
 						.setExperience(playerData.getExp())
-						.setWeapon(null)
-						.setArmor(null)
-						.setHelm(null)
+						.setWeapon(playerData.getWeapon())
+						.setArmor(playerData.getArmor())
+						.setHelm(playerData.getHelm())
 						.build();
 
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -140,10 +140,9 @@ public class GameModel
 			{
 				this.saves.get(i).setLvl(this.player.getLevel());
 				this.saves.get(i).setExp(this.player.getExperience());
-				// TODO : add artifacts
-				// this.saves.get(i).setWeapon(this.player.getWeapon());
-				// this.saves.get(i).setArmor(this.player.getArmor());
-				// this.saves.get(i).setHelm(this.player.getHelm());
+				this.saves.get(i).setWeapon(this.player.getWeapon());
+				this.saves.get(i).setArmor(this.player.getArmor());
+				this.saves.get(i).setHelm(this.player.getHelm());
 				break;
 			}
 		}
@@ -159,13 +158,9 @@ public class GameModel
 			playerData.setHeroClass(this.player.getHeroClass());
 			playerData.setLvl(this.player.getLevel());
 			playerData.setExp(this.player.getExperience());
-			playerData.setWeapon("none");
-			playerData.setArmor("none");
-			playerData.setHelm("none");
-			//TODO : add artifacts saving
-			// playerData.setWeapon(this.player.getWeapon());
-			// playerData.setArmor(this.player.getArmor());
-			// playerData.setHelm(this.player.getHelm());
+			playerData.setWeapon(this.player.getWeapon());
+			playerData.setArmor(this.player.getArmor());
+			playerData.setHelm(this.player.getHelm());
 
 			this.saves.add(playerData);
 		}

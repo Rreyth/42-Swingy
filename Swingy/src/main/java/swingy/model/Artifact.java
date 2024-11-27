@@ -1,5 +1,8 @@
-package swingy.model.artifact;
+package swingy.model;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class Artifact
 {
 	private int attack;
@@ -7,8 +10,14 @@ public class Artifact
 	private int hitPoints;
 
 	private String type;
+	private String name;
 	private int quality;
 
+	public Artifact()
+	{
+	}
+
+	//TODO: add name
 	public Artifact(String p_type, int p_attack, int p_defense, int p_hitPoints, int quality)
 	{
 		this.type = p_type;

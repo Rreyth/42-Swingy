@@ -70,8 +70,6 @@ public class MapGenerator
 			map.getTile(newPos[0], newPos[1]).setOccupied(true);
 			map.getTile(newPos[0], newPos[1]).setVillain(newVillain);
 		}
-
-		//TODO : floor artifact gen ?
 	}
 
 	private boolean	alreadyTaken(List<int[]> takenPos, int[] newPos)
