@@ -183,12 +183,12 @@ public class GameController
 			Print.print("LEVEL UP! You are now level " + player.getLevel() + ".");
 
 		int rand = RandGenerator.getInstance().randInt(0, 5);
-		int diff = (villainLevel - playerLevel);
+		int diff = Math.max((villainLevel - playerLevel), 0);
 
 		if (rand <= diff)
 		{
 			Artifact loot = ArtifactGenerator.getInstance().newArtifact(player.getHeroClass(), diff, player.getLevel());
-			this.view.displayLoot(loot);
+			this.view.displayLoot(loot, player);
 			this.lootLoop(loot, player);
 		}
 	}

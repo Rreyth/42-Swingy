@@ -119,6 +119,7 @@ public class GameMap
 				this.movePlayer("east");
 				break;
 		}
+		this.isFinished = false;
 	}
 
 	public Villain	villainEncounter()

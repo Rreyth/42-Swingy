@@ -129,6 +129,21 @@ public class Entity
 		return (this.helm);
 	}
 
+	public Artifact getArtifactByType(String type)
+	{
+		switch (type)
+		{
+			case "weapon":
+				return (this.weapon);
+			case "armor":
+				return (this.armor);
+			case "helm":
+				return (this.helm);
+			default:
+				return (null);
+		}
+	}
+
 	//SETTERS
 	public void setName(String p_name)
 	{

@@ -18,9 +18,10 @@ public class Artifact
 	}
 
 	//TODO: add name
-	public Artifact(String p_type, int p_attack, int p_defense, int p_hitPoints, int quality)
+	public Artifact(String p_type, String p_name, int p_attack, int p_defense, int p_hitPoints, int quality)
 	{
 		this.type = p_type;
+		this.name = p_name;
 		this.attack = p_attack;
 		this.defense = p_defense;
 		this.hitPoints = p_hitPoints;
@@ -31,6 +32,11 @@ public class Artifact
 	public String getType()
 	{
 		return (this.type);
+	}
+
+	public String getName()
+	{
+		return (this.name);
 	}
 
 	public int getAttack()
@@ -57,6 +63,11 @@ public class Artifact
 	public void setType(String p_type)
 	{
 		this.type = p_type;
+	}
+
+	public void setName(String p_name)
+	{
+		this.name = p_name;
 	}
 
 	public void setAttack(int p_attack)

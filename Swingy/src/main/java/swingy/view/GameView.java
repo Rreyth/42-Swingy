@@ -79,14 +79,26 @@ public class GameView
 		Print.print("Hitpoints:\t" + stat + "\t(" + baseStat + " + " + artifactStat + ")");
 	}
 
-	public void	displayLoot(Artifact loot)
+	public void	displayLoot(Artifact loot, Player player)
 	{
+		Artifact oldArtifact = player.getArtifactByType(loot.getType());
 		String[] quality = {"weathered", "fragile", "acceptable", "excellent", "pristine"};
-		Print.print("\nYou dropped an " + quality[loot.getQuality()] + " " + loot.getType()+ "!");
+		int diffAtk = loot.getAttack();
+		int diffDef = loot.getDefense();
+		int diffHp = loot.getHitPoints();
+
+		if (oldArtifact != null)
+		{
+			diffAtk -= oldArtifact.getAttack();
+			diffDef -= oldArtifact.getDefense();
+			diffHp -= oldArtifact.getHitPoints();
+		}
+
+		Print.print("\nYou dropped a " + quality[loot.getQuality()] + " " + loot.getName()+ "!");
 		Print.print("Stats:");
-		Print.print("Attack:\t\t" + loot.getAttack());
-		Print.print("Defense:\t" + loot.getDefense());
-		Print.print("Hit points:\t" + loot.getHitPoints());
+		Print.print("Attack:\t\t" + loot.getAttack() + "\t(" + ((diffAtk > 0) ? "+" : "") + diffAtk + ")");
+		Print.print("Defense:\t" + loot.getDefense() + "\t(" + ((diffDef > 0) ? "+" : "") + diffDef + ")");
+		Print.print("Hit points:\t" + loot.getHitPoints() + "\t(" + ((diffHp > 0) ? "+" : "") + diffHp + ")");
 	}
 
 	public String	getInput()
