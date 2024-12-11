@@ -17,7 +17,6 @@ public class Artifact
 	{
 	}
 
-	//TODO: add name
 	public Artifact(String p_type, String p_name, int p_attack, int p_defense, int p_hitPoints, int quality)
 	{
 		this.type = p_type;

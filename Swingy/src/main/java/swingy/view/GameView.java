@@ -45,6 +45,12 @@ public class GameView
 		}
 	}
 
+	public void	displayText(Object text)
+	{
+		//console
+		Print.print(text);
+	}
+
 	public void	displayStats(Player player)
 	{
 		Print.print("");

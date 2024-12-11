@@ -74,10 +74,3 @@ public class ArtifactGenerator
 		return (loot);
 	}
 }
-
-// quality:
-// 0 -> Weathered
-// 1 -> Fragile
-// 2 -> Acceptable
-// 3 -> Excellent
-// 4 -> Pristine

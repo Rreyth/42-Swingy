@@ -194,4 +194,16 @@ public class Entity
 	{
 		this.helm = p_helm;
 	}
+
+	public void	attack(Entity other)
+	{
+		int atk, def, hp;
+
+		atk = this.getFullAttack();
+		def = other.getFullDefense();
+		hp = other.getFullHitPoints();
+
+		hp -= Math.max(1, ((atk * atk) / (atk + def)));
+		other.setHitPoints(hp);
+	}
 }

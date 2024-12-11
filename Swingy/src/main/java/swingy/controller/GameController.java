@@ -12,7 +12,6 @@ import swingy.model.entity.Player;
 import swingy.model.entity.Villain;
 import swingy.model.map.GameMap;
 import swingy.view.GameView;
-import swingy.view.Print;
 
 public class GameController
 {
@@ -53,7 +52,7 @@ public class GameController
 		map = MapGenerator.getInstance().newMap(playerLevel);
 		this.model.setGameMap(map);
 
-		Print.print("\nGame starts");
+		this.view.displayText("\nGame starts");
 		this.view.displayStats(this.model.getPlayer());
 
 		gameLoop();
@@ -72,8 +71,8 @@ public class GameController
 			case "create":
 				if (this.model.alreadyExist(res[1]))
 				{
-					Print.print("\nError: Name already exist");
-					Print.print("Do you want to load Hero " + res[1] + "?\t(yes/no)");
+					this.view.displayText("\nError: Name already exist");
+					this.view.displayText("Do you want to load Hero " + res[1] + "?\t(yes/no)");
 					String input = this.view.getInput().toLowerCase();
 					if (!input.equals("yes") || !this.model.loadPlayer(res[1]))
 						this.heroSelect();
@@ -90,8 +89,8 @@ public class GameController
 			case "load":
 				if (!this.model.alreadyExist(res[1]))
 				{
-					Print.print("\nError: Hero " + res[1] + " does not exist");
-					Print.print("Do you want to create it?\t(yes/no)");
+					this.view.displayText("\nError: Hero " + res[1] + " does not exist");
+					this.view.displayText("Do you want to create it?\t(yes/no)");
 					String input = this.view.getInput().toLowerCase();
 					if (!input.equals("yes"))
 						this.heroSelect();
@@ -112,14 +111,14 @@ public class GameController
 		}
 	}
 
-	private void	gameLoop() //TODO: replace every print with a call to view
+	private void	gameLoop()
 	{
 		Villain villain;
 
 		while (this.isRunning)
 		{
 			this.view.display(this.model.getGameMap());
-			Print.print("\nWhere do you want to go?\t(North/South/East/West)(stats/save/switch/quit)");
+			this.view.displayText("\nWhere do you want to go?\t(North/South/East/West)(stats/save/switch/quit)");
 			inputHandler(this.view.getInput().toLowerCase());
 			if (!this.isRunning)
 				break;
@@ -129,8 +128,8 @@ public class GameController
 			if (this.model.getGameMap().isFinished() && this.isRunning)
 			{
 				this.view.display(this.model.getGameMap());
-				Print.print("\nYou have successfully completed the current map!");
-				Print.print("Get ready for the next one!");
+				this.view.displayText("\nYou have successfully completed the current map!");
+				this.view.displayText("Get ready for the next one!");
 				int playerLevel = this.model.getPlayer().getLevel();
 				GameMap map = MapGenerator.getInstance().newMap(playerLevel);
 				this.model.setGameMap(map);
@@ -140,11 +139,11 @@ public class GameController
 
 	private void	fightLoop(Villain villain)
 	{
-		Print.print("You encounter a level " + villain.getLevel() + " " + villain.getName() + ".");
+		this.view.displayText("You encounter a level " + villain.getLevel() + " " + villain.getName() + ".");
 		this.isFighting = true;
 		while (this.isFighting && this.isRunning)
 		{
-			Print.print("\nWhat do you want to do?\t(Fight/Run)");
+			this.view.displayText("\nWhat do you want to do?\t(Fight/Run)");
 			this.inputHandler(this.view.getInput().toLowerCase());
 		}
 	}
@@ -154,16 +153,16 @@ public class GameController
 		this.waitLoot = true;
 		while (this.waitLoot)
 		{
-			Print.print("\nDo you want to keep or leave it?\t(Keep/Leave)");
+			this.view.displayText("\nDo you want to keep or leave it?\t(Keep/Leave)");
 			this.inputHandler(this.view.getInput().toLowerCase());
 		}
 		if (this.isLooting)
 		{
-			Print.print("You decided to keep it");
+			this.view.displayText("You decided to keep it");
 			player.equipLoot(loot);
 		}
 		else
-			Print.print("You decided to leave it");
+			this.view.displayText("You decided to leave it");
 	}
 
 	private void	fightWin(Villain villain, Player player)
@@ -173,13 +172,13 @@ public class GameController
 		int	gainedXp;
 
 		player.setHitPoints(player.getMaxHitPoints());
-		Print.print("\nYou have won the battle against this level " + villainLevel + " " + villain.getName() + ".\nCongratulations!");
+		this.view.displayText("\nYou have won the battle against this level " + villainLevel + " " + villain.getName() + ".\nCongratulations!");
 		this.model.getGameMap().villainDefeat();
 
 		gainedXp = villainLevel * 750 + (villainLevel - 1) * (villainLevel - 1) * 400;
-		Print.print("You have gained " + gainedXp + " experience points.");
+		this.view.displayText("You have gained " + gainedXp + " experience points.");
 		if (player.gainExperience(gainedXp))
-			Print.print("LEVEL UP! You are now level " + player.getLevel() + ".");
+			this.view.displayText("LEVEL UP! You are now level " + player.getLevel() + ".");
 
 		int rand = RandGenerator.getInstance().randInt(0, 5);
 		int diff = Math.max((villainLevel - playerLevel), 0);
@@ -196,9 +195,6 @@ public class GameController
 	{
 		Villain	villain;
 		Player	player;
-		int		atk;
-		int		def;
-		int		hp;
 
 		villain = this.model.getGameMap().villainEncounter();
 		player = this.model.getPlayer();
@@ -206,23 +202,13 @@ public class GameController
 		while (player.getHitPoints() > 0 && villain.getHitPoints() > 0)
 		{
 			// player attack
-			atk = player.getFullAttack();
-			def = villain.getFullDefense();
-			hp = villain.getFullHitPoints();
+			player.attack(villain);
 
-
-			hp -= Math.max(1, ((atk * atk) / (atk + def)));
-			villain.setHitPoints(hp);
-			if (hp <= 0)
+			if (villain.getHitPoints() <= 0)
 				break;
 
 			// villain attack
-			atk = villain.getFullAttack();
-			def = player.getFullDefense();
-			hp = player.getFullHitPoints();
-
-			hp -= Math.max(1, ((atk * atk) / (atk + def)));
-			player.setHitPoints(hp);
+			villain.attack(player);
 		}
 
 		this.isFighting = false;
@@ -231,7 +217,7 @@ public class GameController
 			this.fightWin(villain, player);
 		else if (player.getHitPoints() <= 0)
 		{
-			Print.print("You have lost the battle against this level " + villain.getLevel() + " " + villain.getName() + ".\nThis is the end of the game for this hero. Better luck next time.");
+			this.view.displayText("You have lost the battle against this level " + villain.getLevel() + " " + villain.getName() + ".\nThis is the end of the game for this hero. Better luck next time.");
 			this.loseQuit();
 		}
 	}
@@ -243,24 +229,24 @@ public class GameController
 			switch (input)
 			{
 				case "fight":
-					Print.print("You decide to fight.");
+					this.view.displayText("You decide to fight.");
 					this.fightHandler();
 					break;
 				case "run":
 					if (RandGenerator.getInstance().randInt(0, 2) == 0) // Run success
 					{
-						Print.print("Your escape from the villain was successful");
+						this.view.displayText("Your escape from the villain was successful");
 						this.isFighting = false;
 						this.model.getGameMap().undoLastMove();
 					}
 					else // Run failure
 					{
-						Print.print("You failed to escape");
+						this.view.displayText("You failed to escape");
 						this.fightHandler();
 					}
 					break;
 				default:
-					Print.print("\nError: Only fight and run are available during an encounter");
+					this.view.displayText("\nError: Only fight and run are available during an encounter");
 					break;
 			}
 		}
@@ -277,7 +263,7 @@ public class GameController
 					this.isLooting = false;
 					break;
 				default:
-					Print.print("\nError: You have to chose if you keep or leave the artifact");
+					this.view.displayText("\nError: You have to chose if you keep or leave the artifact");
 					break;
 			}
 		}
@@ -292,21 +278,21 @@ public class GameController
 		else if (this.moveList.contains(input))
 			this.model.getGameMap().movePlayer(input);
 		else
-			Print.print("\nError: Unknown command");
+			this.view.displayText("\nError: Unknown command");
 	}
 
 	private	void	quitGame()
 	{
-		Print.print("\nQuitting game");
+		this.view.displayText("\nQuitting game");
 		this.model.quitGame();
 		this.isRunning = false;
 	}
 
 	private void	loseQuit()
 	{
-		Print.print("\nDeleting hero save");
-		// this.model.loseQuit(); //TODO: commented for testing
-		Print.print("\nQuitting game");
+		this.view.displayText("\nDeleting hero save");
+		this.model.loseQuit();
+		this.view.displayText("\nQuitting game");
 		this.isRunning = false;
 	}
 }
