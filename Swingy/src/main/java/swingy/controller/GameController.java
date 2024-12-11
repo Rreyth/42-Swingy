@@ -117,7 +117,7 @@ public class GameController
 
 		while (this.isRunning)
 		{
-			this.view.display(this.model.getGameMap());
+			this.view.displayMap(this.model.getGameMap());
 			this.view.displayText("\nWhere do you want to go?\t(North/South/East/West)(stats/save/switch/quit)");
 			inputHandler(this.view.getInput().toLowerCase());
 			if (!this.isRunning)
@@ -127,7 +127,7 @@ public class GameController
 				this.fightLoop(villain);
 			if (this.model.getGameMap().isFinished() && this.isRunning)
 			{
-				this.view.display(this.model.getGameMap());
+				this.view.displayMap(this.model.getGameMap());
 				this.view.displayText("\nYou have successfully completed the current map!");
 				this.view.displayText("Get ready for the next one!");
 				int playerLevel = this.model.getPlayer().getLevel();
