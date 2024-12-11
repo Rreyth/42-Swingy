@@ -6,7 +6,4 @@ public class Villain extends Entity
 	{
 		super(name, "Villain", level, experience, attack, defense, hitPoints, null, null, null);
 	}
-
-	//drop method to drop artifact ? -> gen quality(mob level) -> gen type -> drop chance (mob level + quality) -> drop
-
 }

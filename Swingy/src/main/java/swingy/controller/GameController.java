@@ -161,7 +161,6 @@ public class GameController
 		{
 			Print.print("You decided to keep it");
 			player.equipLoot(loot);
-			// TODO : display new stats ?
 		}
 		else
 			Print.print("You decided to leave it");
