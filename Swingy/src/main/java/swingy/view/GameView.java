@@ -11,64 +11,78 @@ public class GameView
 {
 	private String	mode;
 	private final ConsoleView consoleView = new ConsoleView();
+	private final GuiView guiView = new GuiView();
 
 	public	GameView(String p_mode)
 	{
 		this.mode = p_mode;
+
+		if (this.mode.equals("gui"))
+			this.guiView.createWindow();
 	}
 
 	public void	displayMap(GameMap map)
 	{
 		if (this.mode.equals("console"))
 			this.consoleView.displayMap(map);
+		else
+			this.guiView.displayMap(map);
 	}
 
 	public void	displayText(Object text)
 	{
 		if (this.mode.equals("console"))
 			this.consoleView.displayText(text);
+		else
+			this.guiView.displayText(text);
 	}
 
 	public void	displayStats(Player player)
 	{
 		if (this.mode.equals("console"))
 			this.consoleView.displayStats(player);
+		else
+			this.guiView.displayStats(player);
 	}
 
 	public void	displayLoot(Artifact loot, Player player)
 	{
 		if (this.mode.equals("console"))
 			this.consoleView.displayLoot(loot, player);
+		else
+			this.guiView.displayLoot(loot, player);
 	}
 
 	public String	getInput()
 	{
-		if (this.mode.equals("console")) {
+		if (this.mode.equals("console"))
+		{
 			Print.print("\nEnter your command: ");
 			Scanner scanner = new Scanner(System.in);
 			String input = scanner.nextLine();
-			return input;
+			return (input);
 		}
-		return "";
-		// String[] inputs = {};
-		// return inputs;
+		else
+			return (this.guiView.getInput());
 	}
 
 	public void	switchMode()
 	{
-		if (this.mode.equals("console")) {
+		if (this.mode.equals("console"))
+		{
 			this.mode = "gui";
-			// create gui -> open window etc...
+			this.guiView.createWindow();
 		}
-		else {
+		else
+		{
 			this.mode = "console";
-			// kill gui
+			this.guiView.killWindow();
 		}
 	}
 
 	public String	getMode()
 	{
-		return this.mode;
+		return (this.mode);
 	}
 
 	public void	setMode(String p_mode)
@@ -78,13 +92,14 @@ public class GameView
 
 	public String[]	heroSelect(List<Player> savedHeroes)
 	{
+		//TODO: separate gui vers
 		while (true)
 		{
 			if (mode.equals("console"))
 			{
 				Print.print("\nLoad or create a Hero?\t(load / create)");
 				Scanner scanner = new Scanner(System.in);
-				String input = scanner.nextLine().toLowerCase();
+				String input = scanner.nextLine().toLowerCase().trim();
 				switch (input)
 				{
 					case "create":
@@ -118,13 +133,14 @@ public class GameView
 
 	public String classSelect()
 	{
+		//TODO: separate gui vers
 		while (true)
 		{
 			if (mode.equals("console"))
 			{
 				Print.print("\nChoose a Hero Class\t(Warrior / Mage / Monk)");
 				Scanner scanner = new Scanner(System.in);
-				String input = scanner.nextLine().toLowerCase();
+				String input = scanner.nextLine().toLowerCase().trim();
 
 				if (input.equals("switch"))
 					this.switchMode();

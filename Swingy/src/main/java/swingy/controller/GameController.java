@@ -73,7 +73,7 @@ public class GameController
 				{
 					this.view.displayText("\nError: Name already exist");
 					this.view.displayText("Do you want to load Hero " + res[1] + "?\t(yes/no)");
-					String input = this.view.getInput().toLowerCase();
+					String input = this.view.getInput().toLowerCase().trim();
 					if (!input.equals("yes") || !this.model.loadPlayer(res[1]))
 						this.heroSelect();
 				}
@@ -91,7 +91,7 @@ public class GameController
 				{
 					this.view.displayText("\nError: Hero " + res[1] + " does not exist");
 					this.view.displayText("Do you want to create it?\t(yes/no)");
-					String input = this.view.getInput().toLowerCase();
+					String input = this.view.getInput().toLowerCase().trim();
 					if (!input.equals("yes"))
 						this.heroSelect();
 					else
@@ -119,7 +119,7 @@ public class GameController
 		{
 			this.view.displayMap(this.model.getGameMap());
 			this.view.displayText("\nWhere do you want to go?\t(North/South/East/West)(stats/save/switch/quit)");
-			inputHandler(this.view.getInput().toLowerCase());
+			inputHandler(this.view.getInput().toLowerCase().trim());
 			if (!this.isRunning)
 				break;
 			villain = this.model.getGameMap().villainEncounter();
@@ -144,7 +144,7 @@ public class GameController
 		while (this.isFighting && this.isRunning)
 		{
 			this.view.displayText("\nWhat do you want to do?\t(Fight/Run)");
-			this.inputHandler(this.view.getInput().toLowerCase());
+			this.inputHandler(this.view.getInput().toLowerCase().trim());
 		}
 	}
 
@@ -154,7 +154,7 @@ public class GameController
 		while (this.waitLoot)
 		{
 			this.view.displayText("\nDo you want to keep or leave it?\t(Keep/Leave)");
-			this.inputHandler(this.view.getInput().toLowerCase());
+			this.inputHandler(this.view.getInput().toLowerCase().trim());
 		}
 		if (this.isLooting)
 		{
@@ -224,6 +224,10 @@ public class GameController
 
 	private void	inputHandler(String input)
 	{
+		// TODO: quit work everywhere, switch too ?
+		if (input.isBlank())
+			return;
+		System.out.println(input);
 		if (this.isFighting)
 		{
 			switch (input)
