@@ -128,6 +128,15 @@ public class GameView
 						break;
 				}
 			}
+			else
+			{
+				String[] res = this.guiView.heroSelect(savedHeroes);
+
+				if (res[0].equals("switch"))
+					this.switchMode();
+				else if (!res[0].isBlank())
+					return (res);
+			}
 		}
 	}
 

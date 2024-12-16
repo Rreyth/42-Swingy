@@ -6,10 +6,10 @@ build:
 install:
 	mvn -f Swingy install
 
-gui:
+gui: build
 	java -jar Swingy/target/Swingy-1-jar-with-dependencies.jar gui
 
-console:
+console: build
 	clear -x
 	java -jar Swingy/target/Swingy-1-jar-with-dependencies.jar console
 

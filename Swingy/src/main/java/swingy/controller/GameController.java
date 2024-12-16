@@ -58,10 +58,16 @@ public class GameController
 		gameLoop();
 	}
 
-	private void	heroSelect()
+	private void	heroSelect() // TODO: add full create / call to validator ?
 	{
 		String[] res;
 		res = this.view.heroSelect(this.model.getSavedHeroes());
+
+		//TODO: RM
+		for (String tmp : res)
+		{
+			System.out.println(tmp);
+		}
 
 		switch (res[0])
 		{
