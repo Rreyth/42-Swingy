@@ -1,5 +1,6 @@
 package swingy.view;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -10,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
@@ -25,10 +27,13 @@ public class GuiView
 	GamePanel	gamePanel;
 	JPanel		startPanel;
 
+	JTextArea	errorArea;
+
 	Boolean		isInit = false;
 	Boolean		isCreatePanel = false;
 
 	int			selectedLoad = -1;
+	String		selectedClass = "";
 
 	// JLabel	label = null;
 
@@ -42,32 +47,74 @@ public class GuiView
 
 	private JPanel initMiddleCreate()
 	{
-		int	frameW = this.frame.getWidth();
-		int frameH = this.frame.getHeight();
-		JPanel panel = new JPanel();
+		int			frameW = this.frame.getWidth();
+		int			frameH = this.frame.getHeight();
+		JPanel		panel = new JPanel();
+		JLabel		nameLabel = new JLabel("Name:");
+		JLabel		classLabel = new JLabel("Class");
+		JTextField	nameField = new JTextField();
+		JButton		warButton = new JButton("Warrior");
+		JButton		mageButton = new JButton("Mage");
+		JButton		monkButton = new JButton("Monk");
+
+
+		this.errorArea = new JTextArea();
+		this.errorArea.setEditable(false);
+		this.errorArea.setFocusable(false);
+		this.errorArea.setLineWrap(true);
+		this.errorArea.setWrapStyleWord(true);
+		this.errorArea.setForeground(Color.RED);
+		Font currentFont = this.errorArea.getFont();
+		this.errorArea.setFont(new Font(currentFont.getName(), Font.BOLD, 16));
+
+		JScrollPane scrollPane = new JScrollPane(this.errorArea);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds((int)(frameW * 0.33), (int)(frameH * 0.65), (int)(frameW * 0.34), 100);
+
 		panel.setBounds(0, 0, frameW, frameH);
 		panel.setLayout(null);
 
-		JLabel		nameLabel = new JLabel("Name:");
-		JLabel		classLabel = new JLabel("Class:");
-		JTextField	nameField = new JTextField();
-		JTextField	classField = new JTextField();
-
-		Font currentFont = nameLabel.getFont();
+		currentFont = nameLabel.getFont();
 		nameLabel.setFont(new Font(currentFont.getName(), currentFont.getStyle(), 25));
 		nameLabel.setBounds((int)(frameW * 0.35), (int)(frameH * 0.35), 100, 50);
 
 		currentFont = classLabel.getFont();
-		classLabel.setFont(new Font(currentFont.getName(), currentFont.getStyle(), 25));
-		classLabel.setBounds((int)(frameW * 0.35) + 5, (int)(frameH * 0.45), 100, 50);
+		classLabel.setFont(new Font(currentFont.getName(), Font.BOLD, 25));
+		classLabel.setBounds((int)(frameW * 0.48) - 5, (int)(frameH * 0.45), 100, 50);
 
 		nameField.setBounds((int)(frameW * 0.5) - 100, (int)(frameH * 0.35), 200, 50);
-		classField.setBounds((int)(frameW * 0.5) - 100, (int)(frameH * 0.45), 200, 50);
+
+		warButton.setBounds((int)(frameW * 0.35) - 75, (int)(frameH * 0.525), 150, 75);
+		currentFont = warButton.getFont();
+		warButton.setFont(new Font(currentFont.getName(), Font.BOLD, 25));
+
+		mageButton.setBounds((int)(frameW * 0.5) - 75, (int)(frameH * 0.525), 150, 75);
+		currentFont = mageButton.getFont();
+		mageButton.setFont(new Font(currentFont.getName(), Font.BOLD, 25));
+
+		monkButton.setBounds((int)(frameW * 0.65) - 75, (int)(frameH * 0.525), 150, 75);
+		currentFont = monkButton.getFont();
+		monkButton.setFont(new Font(currentFont.getName(), Font.BOLD, 25));
+
+		warButton.addActionListener(e -> {
+			this.selectedClass = "Warrior";
+		});
+
+		mageButton.addActionListener(e -> {
+			this.selectedClass = "Mage";
+		});
+
+		monkButton.addActionListener(e -> {
+			this.selectedClass = "Monk";
+		});
 
 		panel.add(nameLabel);
 		panel.add(classLabel);
 		panel.add(nameField);
-		panel.add(classField);
+		panel.add(warButton);
+		panel.add(mageButton);
+		panel.add(monkButton);
+		panel.add(scrollPane);
 
 		return (panel);
 	}
@@ -118,10 +165,6 @@ public class GuiView
 		int	frameW = this.frame.getWidth();
 		int frameH = this.frame.getHeight();
 
-		this.startPanel = new JPanel();
-		this.startPanel.setBounds(0, 0, frameW, frameH);
-		this.startPanel.setLayout(null);
-
 		JButton switchButton = new JButton("Switch ⛗");
 		JButton quitButton = new JButton("Quit ⏼");
 		JButton createButton = new JButton("Create");
@@ -131,6 +174,10 @@ public class GuiView
 
 		JPanel middleCreatePanel = this.initMiddleCreate();
 		JScrollPane middleLoadPanel = this.initMiddleLoad(savedHeroes);
+
+		this.startPanel = new JPanel();
+		this.startPanel.setBounds(0, 0, frameW, frameH);
+		this.startPanel.setLayout(null);
 
 		Font currentFont = topText.getFont();
 		topText.setFont(new Font(currentFont.getName(), Font.BOLD, 30));
@@ -143,12 +190,12 @@ public class GuiView
 		quitButton.setLocation((int)(frameW * 0.9), (int)(frameH * 0.885));
 
 		createButton.setSize(150, 75);
-		createButton.setLocation((int)(frameW * 0.3), (int)(frameH * 0.8));
+		createButton.setLocation((int)(frameW * 0.35) - 75, (int)(frameH * 0.8));
 		currentFont = createButton.getFont();
 		createButton.setFont(new Font(currentFont.getName(), Font.BOLD, 25));
 
 		loadButton.setSize(150, 75);
-		loadButton.setLocation((int)(frameW * 0.63), (int)(frameH * 0.8));
+		loadButton.setLocation((int)(frameW * 0.65) - 75, (int)(frameH * 0.8));
 		currentFont = loadButton.getFont();
 		loadButton.setFont(new Font(currentFont.getName(), Font.BOLD, 25));
 
@@ -166,16 +213,16 @@ public class GuiView
 			if (this.isCreatePanel)
 			{
 				this.startInputs[0] = "fullCreate";
-				int i = 1;
 				for (Component comp : middleCreatePanel.getComponents())
 				{
 					if (comp instanceof JTextField)
 					{
 						JTextField textField = (JTextField) comp;
-						this.startInputs[i] = textField.getText();
-						i++;
+						this.startInputs[1] = textField.getText();
+						break;
 					}
 				}
+				this.startInputs[2] = this.selectedClass;
 				if (this.startInputs[1].isBlank() || this.startInputs[2].isBlank())
 					this.startInputs = new String[] {"", "", ""};
 			}
@@ -192,9 +239,10 @@ public class GuiView
 
 			this.frame.repaint();
 
+			this.selectedClass = "";
+
 			if (this.selectedLoad != -1)
 			{
-				System.out.println(this.selectedLoad);
 				this.startInputs[0] = "load";
 				this.startInputs[1] = savedHeroes.get(this.selectedLoad).getName();
 				this.frame.remove(this.startPanel);
@@ -203,6 +251,14 @@ public class GuiView
 			}
 		});
 
+		switchButton.addActionListener(e -> {
+			this.startInputs[0] = "switch";
+		});
+
+		quitButton.addActionListener(e -> {
+			this.startInputs[0] = "quit";
+			this.frame.dispose();
+		});
 
 		this.startPanel.add(switchButton);
 		this.startPanel.add(quitButton);
@@ -231,6 +287,7 @@ public class GuiView
 		JButton fightButton = new JButton("Fight ⚔");
 		JButton runButton = new JButton("Run ⏎");
 		// ⮝ ⮜ ⮞ ⮟ ⚔ ⏎ ⏏ ⭳ ⮿ ⏼ ☐ ⇵ ⛗ ⚙
+		//TODO: add keep and leave buttons
 
 		saveButton.setSize(110, 40);
 		saveButton.setLocation((int)(frameW * 0.875), (int)(frameH * 0.755));
@@ -255,9 +312,15 @@ public class GuiView
 
 		fightButton.setSize(100, 35);
 		fightButton.setLocation((int)(frameW * 0.55), (int)(frameH * 0.85));
+		fightButton.setEnabled(false);
 
 		runButton.setSize(100, 35);
 		runButton.setLocation((int)(frameW * 0.625), (int)(frameH * 0.85));
+		runButton.setEnabled(false);
+
+		saveButton.addActionListener(e -> {
+			this.input = "save";
+		});
 
 		switchButton.addActionListener(e -> {
 			this.input = "switch";
@@ -268,13 +331,29 @@ public class GuiView
 			this.frame.dispose();
 		});
 
-		//TODO: add buttons actions
+		northButton.addActionListener(e -> {
+			this.input = "north";
+		});
 
-		// this.northButton.addActionListener(e -> {
-		// 	frame.remove(this.gamePanel);
-		// 	frame.revalidate();
-		// 	frame.repaint();
-		// });
+		southButton.addActionListener(e -> {
+			this.input = "south";
+		});
+
+		eastButton.addActionListener(e -> {
+			this.input = "east";
+		});
+
+		westButton.addActionListener(e -> {
+			this.input = "west";
+		});
+
+		fightButton.addActionListener(e -> {
+			this.input = "fight";
+		});
+
+		runButton.addActionListener(e -> {
+			this.input = "run";
+		});
 
 		this.gamePanel.add(saveButton);
 		this.gamePanel.add(switchButton);
@@ -289,6 +368,7 @@ public class GuiView
 
 	public void createWindow() //TODO
 	{
+		this.isInit = false;
 		FlatDarkPurpleIJTheme.setup();
 		this.frame = new JFrame("Swingy");
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //TODO: DONT DO ANYTHING -> add event listener for clean quit
@@ -298,8 +378,7 @@ public class GuiView
 
 		this.initGameScreen();
 
-		// this.frame.add(this.startPanel);
-		// this.frame.add(this.gamePanel);
+		this.frame.add(this.gamePanel);
 
 		this.frame.setVisible(true);
 	}
@@ -318,6 +397,13 @@ public class GuiView
 	{
 	}
 
+	public void displayError(String text)
+	{
+		this.errorArea.append(text + "\n");
+		this.errorArea.setCaretPosition(this.errorArea.getDocument().getLength());
+		this.frame.repaint();
+	}
+
 	public void	displayStats(Player player) //TODO
 	{
 	}
@@ -326,12 +412,26 @@ public class GuiView
 	{
 	}
 
+	public void displayGame()
+	{
+		this.frame.remove(this.startPanel);
+		this.frame.add(this.gamePanel);
+		this.frame.repaint();
+	}
+
 	public String	getInput()
 	{
 		String	ret;
 
 		ret = this.input;
 		this.input = "";
+		try
+		{
+			Thread.sleep(10);
+		}
+		catch (InterruptedException e)
+		{}
+
 		return (ret);
 	}
 
@@ -340,6 +440,7 @@ public class GuiView
 		if (!this.isInit)
 		{
 			this.initStartScreen(savedHeroes);
+			this.frame.remove(this.gamePanel);
 			this.frame.add(this.startPanel);
 			this.frame.repaint();
 			this.isInit = true;

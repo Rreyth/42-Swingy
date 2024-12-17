@@ -2,6 +2,9 @@ package swingy.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
 
 import swingy.controller.generators.ArtifactGenerator;
 import swingy.controller.generators.MapGenerator;
@@ -58,16 +61,10 @@ public class GameController
 		gameLoop();
 	}
 
-	private void	heroSelect() // TODO: add full create / call to validator ?
+	private void	heroSelect()
 	{
 		String[] res;
 		res = this.view.heroSelect(this.model.getSavedHeroes());
-
-		//TODO: RM
-		for (String tmp : res)
-		{
-			System.out.println(tmp);
-		}
 
 		switch (res[0])
 		{
@@ -88,8 +85,15 @@ public class GameController
 					String heroClass = this.view.classSelect();
 					if (heroClass.equals("quit"))
 						quitGame();
-					else if (!this.model.createPlayer(res[1], heroClass))
+					Set<ConstraintViolation<Player>> violations;
+					violations = this.model.createPlayer(res[1], heroClass);
+					if (!violations.isEmpty())
+					{
+						for (ConstraintViolation<Player> violation : violations)
+							this.view.displayText(violation.getMessage());
+						this.model.erasePlayer();
 						this.heroSelect();
+					}
 				}
 				break;
 			case "load":
@@ -105,14 +109,43 @@ public class GameController
 						String heroClass = this.view.classSelect();
 						if (heroClass.equals("quit"))
 							quitGame();
-						else if (!this.model.createPlayer(res[1], heroClass))
+						Set<ConstraintViolation<Player>> violations;
+						violations = this.model.createPlayer(res[1], heroClass);
+						if (!violations.isEmpty())
+						{
+							for (ConstraintViolation<Player> violation : violations)
+								this.view.displayText(violation.getMessage());
+							this.model.erasePlayer();
 							this.heroSelect();
+						}
 					}
 				}
 				else if (!this.model.loadPlayer(res[1]))
 					this.heroSelect();
 				break;
+			case "fullCreate":
+				if (this.model.alreadyExist(res[1]))
+				{
+					this.view.displayGuiError("Error: Name already exist");
+					this.heroSelect();
+				}
+				else
+				{
+					Set<ConstraintViolation<Player>> violations;
+					violations = this.model.createPlayer(res[1], res[2]);
+					if (!violations.isEmpty())
+					{
+						for (ConstraintViolation<Player> violation : violations)
+							this.view.displayGuiError(violation.getMessage());
+						this.model.erasePlayer();
+						this.heroSelect();
+					}
+					else
+						this.view.displayGuiGame();
+				}
+				break;
 			default:
+				this.heroSelect();
 				break;
 		}
 	}

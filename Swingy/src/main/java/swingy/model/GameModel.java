@@ -71,10 +71,15 @@ public class GameModel
 		this.map = newMap;
 	}
 
-	public boolean	createPlayer(String name, String heroClass)
+	public void erasePlayer()
+	{
+		this.player = null;
+	}
+
+	public Set<ConstraintViolation<Player>>	createPlayer(String name, String heroClass)
 	{
 		heroClass = heroClass.substring(0, 1).toUpperCase() + heroClass.substring(1);
-		Player tmpPlayer = new Player.Builder()
+		this.player = new Player.Builder()
 						.setName(name)
 						.setHeroClass(heroClass)
 						.setLevel(1)
@@ -87,16 +92,7 @@ public class GameModel
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
 
-		Set<ConstraintViolation<Player>> violations = validator.validate(tmpPlayer);
-
-		if (!violations.isEmpty())
-		{
-			for (ConstraintViolation<Player> violation : violations)
-				System.out.println(violation.getMessage());
-			return (false);
-		}
-		this.player = tmpPlayer;
-		return (true);
+		return (validator.validate(this.player));
 	}
 
 	public boolean	loadPlayer(String name)
@@ -150,6 +146,8 @@ public class GameModel
 
 	public void	save()
 	{
+		if (this.player == null)
+			return;
 		if (!this.alreadyExist(this.player.getName()))
 		{
 			SaveData	playerData = new SaveData();

@@ -37,6 +37,16 @@ public class GameView
 			this.guiView.displayText(text);
 	}
 
+	public void displayGuiError(String text)
+	{
+		this.guiView.displayError(text);
+	}
+
+	public void displayGuiGame()
+	{
+		this.guiView.displayGame();
+	}
+
 	public void	displayStats(Player player)
 	{
 		if (this.mode.equals("console"))
