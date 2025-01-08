@@ -52,7 +52,7 @@ public class GameView
 		if (this.mode.equals("console"))
 			this.consoleView.displayStats(player);
 		else
-			this.guiView.displayStats(player);
+			this.guiView.updateStats(player);
 	}
 
 	public void	displayLoot(Artifact loot, Player player)
@@ -102,7 +102,6 @@ public class GameView
 
 	public String[]	heroSelect(List<Player> savedHeroes)
 	{
-		//TODO: separate gui vers
 		while (true)
 		{
 			if (mode.equals("console"))
@@ -152,7 +151,6 @@ public class GameView
 
 	public String classSelect()
 	{
-		//TODO: separate gui vers
 		while (true)
 		{
 			if (mode.equals("console"))
@@ -167,5 +165,17 @@ public class GameView
 					return (input);
 			}
 		}
+	}
+
+	public void killGui()
+	{
+		if (this.mode.equals("gui"))
+			this.guiView.killWindow();
+	}
+
+	public void updateGuiStats(Player player)
+	{
+		if (this.mode.equals("gui"))
+			this.guiView.updateStats(player);
 	}
 }

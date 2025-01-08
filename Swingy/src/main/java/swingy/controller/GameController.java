@@ -218,6 +218,7 @@ public class GameController
 		this.view.displayText("You have gained " + gainedXp + " experience points.");
 		if (player.gainExperience(gainedXp))
 			this.view.displayText("LEVEL UP! You are now level " + player.getLevel() + ".");
+		this.view.updateGuiStats(player);
 
 		int rand = RandGenerator.getInstance().randInt(0, 5);
 		int diff = Math.max((villainLevel - playerLevel), 0);
@@ -227,6 +228,7 @@ public class GameController
 			Artifact loot = ArtifactGenerator.getInstance().newArtifact(player.getHeroClass(), diff, player.getLevel());
 			this.view.displayLoot(loot, player);
 			this.lootLoop(loot, player);
+			this.view.updateGuiStats(player);
 		}
 	}
 
@@ -266,7 +268,6 @@ public class GameController
 		// TODO: quit work everywhere, switch too ?
 		if (input.isBlank())
 			return;
-		System.out.println(input);
 		if (this.isFighting)
 		{
 			switch (input)
@@ -328,6 +329,7 @@ public class GameController
 	{
 		this.view.displayText("\nQuitting game");
 		this.model.quitGame();
+		this.view.killGui();
 		this.isRunning = false;
 	}
 
@@ -336,6 +338,7 @@ public class GameController
 		this.view.displayText("\nDeleting hero save");
 		this.model.loseQuit();
 		this.view.displayText("\nQuitting game");
+		this.view.killGui();
 		this.isRunning = false;
 	}
 }

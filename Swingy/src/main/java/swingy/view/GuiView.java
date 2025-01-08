@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -257,7 +259,6 @@ public class GuiView
 
 		quitButton.addActionListener(e -> {
 			this.startInputs[0] = "quit";
-			this.frame.dispose();
 		});
 
 		this.startPanel.add(switchButton);
@@ -286,8 +287,8 @@ public class GuiView
 		JButton westButton = new JButton("West ⮜");
 		JButton fightButton = new JButton("Fight ⚔");
 		JButton runButton = new JButton("Run ⏎");
-		// ⮝ ⮜ ⮞ ⮟ ⚔ ⏎ ⏏ ⭳ ⮿ ⏼ ☐ ⇵ ⛗ ⚙
-		//TODO: add keep and leave buttons
+		JButton keepButton = new JButton("Keep");
+		JButton leaveButton = new JButton("Leave");
 
 		saveButton.setSize(110, 40);
 		saveButton.setLocation((int)(frameW * 0.875), (int)(frameH * 0.755));
@@ -311,12 +312,20 @@ public class GuiView
 		westButton.setLocation((int)(frameW * 0.275), (int)(frameH * 0.85));
 
 		fightButton.setSize(100, 35);
-		fightButton.setLocation((int)(frameW * 0.55), (int)(frameH * 0.85));
+		fightButton.setLocation((int)(frameW * 0.575), (int)(frameH * 0.85));
 		fightButton.setEnabled(false);
 
 		runButton.setSize(100, 35);
-		runButton.setLocation((int)(frameW * 0.625), (int)(frameH * 0.85));
+		runButton.setLocation((int)(frameW * 0.65), (int)(frameH * 0.85));
 		runButton.setEnabled(false);
+
+		keepButton.setSize(100, 35);
+		keepButton.setLocation((int)(frameW * 0.35), (int)(frameH * 0.72));
+		keepButton.setEnabled(false);
+
+		leaveButton.setSize(100, 35);
+		leaveButton.setLocation((int)(frameW * 0.6125), (int)(frameH * 0.72));
+		leaveButton.setEnabled(false);
 
 		saveButton.addActionListener(e -> {
 			this.input = "save";
@@ -328,7 +337,6 @@ public class GuiView
 
 		quitButton.addActionListener(e -> {
 			this.input = "quit";
-			this.frame.dispose();
 		});
 
 		northButton.addActionListener(e -> {
@@ -355,6 +363,14 @@ public class GuiView
 			this.input = "run";
 		});
 
+		keepButton.addActionListener(e -> {
+			this.input = "keep";
+		});
+
+		leaveButton.addActionListener(e -> {
+			this.input = "leave";
+		});
+
 		this.gamePanel.add(saveButton);
 		this.gamePanel.add(switchButton);
 		this.gamePanel.add(quitButton);
@@ -364,17 +380,28 @@ public class GuiView
 		this.gamePanel.add(westButton);
 		this.gamePanel.add(fightButton);
 		this.gamePanel.add(runButton);
+		this.gamePanel.add(keepButton);
+		this.gamePanel.add(leaveButton);
 	}
 
-	public void createWindow() //TODO
+	public void createWindow()
 	{
 		this.isInit = false;
 		FlatDarkPurpleIJTheme.setup();
 		this.frame = new JFrame("Swingy");
-		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //TODO: DONT DO ANYTHING -> add event listener for clean quit
+		this.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.frame.setSize(1600, 900);
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setLayout(null);
+
+		this.frame.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				input = "quit";
+			}
+		});
 
 		this.initGameScreen();
 
@@ -404,8 +431,52 @@ public class GuiView
 		this.frame.repaint();
 	}
 
-	public void	displayStats(Player player) //TODO
+	private String formatStats(Player player)
 	{
+		int toNextLvl = player.getToNextLevel();
+		int exp = player.getExperience();
+		int	lvlPercentage = (int)(((double) exp / toNextLvl) * 100);
+
+		int	atk = player.getFullAttack();
+		int baseAtk = player.getAttack();
+		int artifactAtk = atk - baseAtk;
+
+		int	def = player.getFullDefense();
+		int baseDef = player.getDefense();
+		int artifactDef = def - baseDef;
+
+		int	hp = player.getFullHitPoints();
+		int	baseHp = player.getHitPoints();
+		int	artifactHp = hp - baseHp;
+
+		String infos = "<html>" +
+				"<table>" +
+				"<tr><td>" + player.getName() + "</td></tr>" +
+				"<tr><td>Class:</td><td>" + player.getHeroClass() + "</td></tr>" +
+				"<tr><td>Level:</td><td>" + player.getLevel() + "</td><td>(" + lvlPercentage + "%)</td></tr>" +
+				"<tr><td>Attack:</td><td>" + player.getFullAttack() + "</td><td>(" + baseAtk + " + " + artifactAtk + ")</td></tr>" +
+				"<tr><td>Defense:</td><td>" + player.getFullDefense() + "</td><td>(" + baseDef + " + " + artifactDef + ")</td></tr>" +
+				"<tr><td>Hitpoints:</td><td>" + player.getFullHitPoints() + "</td><td>(" + baseHp + " + " + artifactHp + ")</td></tr>" +
+				"</table>" +
+				"</html>";
+
+		return (infos);
+	}
+
+	public void	updateStats(Player player)
+	{
+		//TODO : real update after fight and loot
+
+		JLabel stats = new JLabel(this.formatStats(player));
+
+		Font currentFont = stats.getFont();
+		stats.setFont(new Font(currentFont.getName(), currentFont.getStyle(), 20));
+		stats.setBounds(10, 0, 300, 200);
+
+		this.gamePanel.add(stats);
+		this.gamePanel.repaint();
+
+		this.frame.repaint();
 	}
 
 	public void	displayLoot(Artifact loot, Player player) //TODO
@@ -435,7 +506,7 @@ public class GuiView
 		return (ret);
 	}
 
-	public String[]	heroSelect(List<Player> savedHeroes) //TODO
+	public String[]	heroSelect(List<Player> savedHeroes)
 	{
 		if (!this.isInit)
 		{
