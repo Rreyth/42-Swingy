@@ -161,12 +161,12 @@ public class GameController
 			this.view.displayMap(this.model.getGameMap());
 			if (this.view.getMode().equals("console"))
 				this.view.displayText("\nWhere do you want to go?\t(North/South/East/West)(stats/save/switch/quit)");
-			inputHandler(this.view.getInput().toLowerCase().trim());
+			inputHandler(this.view.getInput().toLowerCase().trim(), this.model.getPlayer());
 			if (!this.isRunning)
 				break;
 			villain = this.model.getGameMap().villainEncounter();
 			if (villain != null)
-				this.fightLoop(villain);
+				this.fightLoop(this.model.getPlayer(), villain);
 			if (this.model.getGameMap().isFinished() && this.isRunning)
 			{
 				this.view.displayMap(this.model.getGameMap());
@@ -179,7 +179,7 @@ public class GameController
 		}
 	}
 
-	private void	fightLoop(Villain villain)
+	private void	fightLoop(Player player, Villain villain)
 	{
 		this.view.displayText("\nYou encounter a level " + villain.getLevel() + " " + villain.getName() + ".");
 		this.isFighting = true;
@@ -193,7 +193,7 @@ public class GameController
 				this.view.displayText("\nWhat do you want to do?\t(Fight/Run)");
 				this.guiPrinted = true;
 			}
-			this.inputHandler(this.view.getInput().toLowerCase().trim());
+			this.inputHandler(this.view.getInput().toLowerCase().trim(), player);
 		}
 		this.guiPrinted = false;
 	}
@@ -211,7 +211,7 @@ public class GameController
 				this.view.displayText("\nDo you want to keep or leave it?\t(Keep/Leave)");
 				this.guiPrinted = true;
 			}
-			this.inputHandler(this.view.getInput().toLowerCase().trim());
+			this.inputHandler(this.view.getInput().toLowerCase().trim(), player);
 		}
 		this.guiPrinted = false;
 		this.view.changeButtonState(false, "loot");
@@ -284,7 +284,7 @@ public class GameController
 		}
 	}
 
-	private void	inputHandler(String input)
+	private void	inputHandler(String input, Player player)
 	{
 		// TODO: quit work everywhere, switch too ?
 		if (input.isBlank())
@@ -335,7 +335,10 @@ public class GameController
 		else if (input.equals("quit"))
 			quitGame();
 		else if (input.equals("switch"))
-			view.switchMode();
+		{
+			this.view.switchMode();
+			this.view.updateGuiStats(player);
+		}
 		else if (input.equals("save"))
 			this.model.save();
 		else if (input.equals("stats"))

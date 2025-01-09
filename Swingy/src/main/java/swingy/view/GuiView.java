@@ -307,11 +307,11 @@ public class GuiView
 		this.txtArea.setWrapStyleWord(true);
 		this.txtArea.setForeground(Color.WHITE);
 		Font currentFont = this.txtArea.getFont();
-		this.txtArea.setFont(new Font(currentFont.getName(), Font.BOLD, 16));
+		this.txtArea.setFont(new Font(currentFont.getName(), Font.BOLD, 15));
 
 		JScrollPane scrollPane = new JScrollPane(this.txtArea);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setBounds((int)(frameW * 0.25), (int)(frameH * 0.60), (int)(frameW * 0.5), 100);
+		scrollPane.setBounds((int)(frameW * 0.25), (int)(frameH * 0.565), (int)(frameW * 0.5), 145);
 
 		saveButton.setSize(110, 40);
 		saveButton.setLocation((int)(frameW * 0.875), (int)(frameH * 0.755));
@@ -343,11 +343,11 @@ public class GuiView
 		runButton.setEnabled(false);
 
 		keepButton.setSize(100, 35);
-		keepButton.setLocation((int)(frameW * 0.35), (int)(frameH * 0.72));
+		keepButton.setLocation((int)(frameW * 0.35), (int)(frameH * 0.725));
 		keepButton.setEnabled(false);
 
 		leaveButton.setSize(100, 35);
-		leaveButton.setLocation((int)(frameW * 0.6125), (int)(frameH * 0.72));
+		leaveButton.setLocation((int)(frameW * 0.6125), (int)(frameH * 0.725));
 		leaveButton.setEnabled(false);
 
 		saveButton.addActionListener(e -> {
@@ -505,7 +505,7 @@ public class GuiView
 			this.gamePanel.remove(this.mapPanel);
 
 		this.mapPanel = this.createMap(map);
-		this.mapPanel.setBounds((int)(frameW * 0.5) - 250, (int)(frameH * 0.02), 500, 500);
+		this.mapPanel.setBounds((int)(frameW * 0.5) - 250, (int)(frameH * 0.01), 500, 500);
 
 		this.gamePanel.add(this.mapPanel);
 		this.gamePanel.revalidate();
@@ -579,8 +579,26 @@ public class GuiView
 		this.statsCreated = true;
 	}
 
-	public void	displayLoot(Artifact loot, Player player) //TODO
+	public void	displayLoot(Artifact loot, Player player)
 	{
+		Artifact oldArtifact = player.getArtifactByType(loot.getType());
+		String[] quality = {"weathered", "fragile", "acceptable", "excellent", "pristine"};
+		int diffAtk = loot.getAttack();
+		int diffDef = loot.getDefense();
+		int diffHp = loot.getHitPoints();
+
+		if (oldArtifact != null)
+		{
+			diffAtk -= oldArtifact.getAttack();
+			diffDef -= oldArtifact.getDefense();
+			diffHp -= oldArtifact.getHitPoints();
+		}
+
+		this.displayText("\nYou dropped a " + quality[loot.getQuality()] + " " + loot.getName()+ "!");
+		this.displayText("Stats:");
+		this.displayText("Attack:\t" + loot.getAttack() + "\t(" + ((diffAtk > 0) ? "+" : "") + diffAtk + ")");
+		this.displayText("Defense:\t" + loot.getDefense() + "\t(" + ((diffDef > 0) ? "+" : "") + diffDef + ")");
+		this.displayText("Hit points:\t" + loot.getHitPoints() + "\t(" + ((diffHp > 0) ? "+" : "") + diffHp + ")");
 	}
 
 	public void displayGame()
