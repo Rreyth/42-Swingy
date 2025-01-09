@@ -47,13 +47,8 @@ public class GuiView
 	private int			selectedLoad = -1;
 	private String		selectedClass = "";
 
-	// JLabel	label = null;
-
 	private String		input = "";
 	private String[]	startInputs = {"", "", ""};
-
-	// TODO: add state ? (heroSelect/game)
-
 
 	public GuiView() {}
 
@@ -516,6 +511,8 @@ public class GuiView
 
 	public void	displayText(Object text)
 	{
+		if (this.frame == null)
+			return;
 		this.txtArea.append(text + "\n");
 		this.txtArea.setCaretPosition(this.txtArea.getDocument().getLength());
 		this.frame.repaint();
@@ -568,7 +565,7 @@ public class GuiView
 		this.stats = new JLabel(this.formatStats(player));
 
 		Font currentFont = this.stats.getFont();
-		this.stats.setFont(new Font(currentFont.getName(), currentFont.getStyle(), 20));
+		this.stats.setFont(new Font(currentFont.getName(), currentFont.getStyle(), 18));
 		this.stats.setBounds(10, 0, 300, 200);
 
 		this.gamePanel.add(this.stats);

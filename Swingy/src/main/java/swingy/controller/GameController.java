@@ -26,6 +26,7 @@ public class GameController
 	private boolean 			isLooting;
 	private boolean 			waitLoot;
 	private boolean				guiPrinted = false;
+	private boolean				switched = false;
 
 	public GameController(GameModel model, GameView view)
 	{
@@ -162,6 +163,8 @@ public class GameController
 			if (this.view.getMode().equals("console"))
 				this.view.displayText("\nWhere do you want to go?\t(North/South/East/West)(stats/save/switch/quit)");
 			inputHandler(this.view.getInput().toLowerCase().trim(), this.model.getPlayer());
+			if (this.switched)
+				this.switched = false;
 			if (!this.isRunning)
 				break;
 			villain = this.model.getGameMap().villainEncounter();
@@ -191,9 +194,17 @@ public class GameController
 			if (viewMode.equals("console") || !this.guiPrinted)
 			{
 				this.view.displayText("\nWhat do you want to do?\t(Fight/Run)");
-				this.guiPrinted = true;
+				if (viewMode.equals("gui"))
+					this.guiPrinted = true;
 			}
 			this.inputHandler(this.view.getInput().toLowerCase().trim(), player);
+			if (this.switched)
+			{
+				this.view.displayText("\nYou encounter a level " + villain.getLevel() + " " + villain.getName() + ".");
+				this.view.changeButtonState(true, "fight");
+				this.guiPrinted = false;
+				this.switched = false;
+			}
 		}
 		this.guiPrinted = false;
 	}
@@ -203,17 +214,27 @@ public class GameController
 		this.waitLoot = true;
 		this.guiPrinted = false;
 		this.view.changeButtonState(true, "loot");
-		while (this.waitLoot)
+		while (this.waitLoot && this.isRunning)
 		{
 			String viewMode = this.view.getMode();
 			if (viewMode.equals("console") || !this.guiPrinted)
 			{
 				this.view.displayText("\nDo you want to keep or leave it?\t(Keep/Leave)");
-				this.guiPrinted = true;
+				if (viewMode.equals("gui"))
+					this.guiPrinted = true;
 			}
 			this.inputHandler(this.view.getInput().toLowerCase().trim(), player);
+			if (this.switched)
+			{
+				this.view.displayLoot(loot, player);
+				this.view.changeButtonState(true, "loot");
+				this.guiPrinted = false;
+				this.switched = false;
+			}
 		}
 		this.guiPrinted = false;
+		if (!this.isRunning)
+			return;
 		this.view.changeButtonState(false, "loot");
 		if (this.isLooting)
 		{
@@ -248,6 +269,8 @@ public class GameController
 			Artifact loot = ArtifactGenerator.getInstance().newArtifact(player.getHeroClass(), diff, player.getLevel());
 			this.view.displayLoot(loot, player);
 			this.lootLoop(loot, player);
+			if (!this.isRunning)
+				return;
 			this.view.updateGuiStats(player);
 		}
 	}
@@ -286,10 +309,21 @@ public class GameController
 
 	private void	inputHandler(String input, Player player)
 	{
-		// TODO: quit work everywhere, switch too ?
 		if (input.isBlank())
 			return;
-		if (this.isFighting)
+		if (input.equals("quit"))
+			quitGame();
+		else if (input.equals("switch"))
+		{
+			this.switched = true;
+			this.view.switchMode();
+			this.view.updateGuiStats(player);
+			if (this.view.getMode().equals("gui") || this.isFighting)
+				this.view.displayMap(this.model.getGameMap());
+		}
+		else if (input.equals("save"))
+			this.model.save();
+		else if (this.isFighting)
 		{
 			switch (input)
 			{
@@ -332,15 +366,6 @@ public class GameController
 					break;
 			}
 		}
-		else if (input.equals("quit"))
-			quitGame();
-		else if (input.equals("switch"))
-		{
-			this.view.switchMode();
-			this.view.updateGuiStats(player);
-		}
-		else if (input.equals("save"))
-			this.model.save();
 		else if (input.equals("stats"))
 			this.view.displayStats(this.model.getPlayer());
 		else if (this.moveList.contains(input))
