@@ -28,28 +28,29 @@ import swingy.model.map.Tile;
 
 public class GuiView
 {
-	JFrame	frame = null;
+	private JFrame	frame = null;
 
-	GamePanel	gamePanel;
-	JPanel		startPanel;
-	JPanel		mapPanel;
+	private GamePanel	gamePanel;
+	private JPanel		startPanel;
+	private JPanel		mapPanel;
 
-	JTextArea	errorArea;
+	private JTextArea	errorArea;
+	private JTextArea	txtArea;
 
-	JLabel		stats;
+	private JLabel		stats;
 
-	Boolean		isInit = false;
-	Boolean		isCreatePanel = false;
-	Boolean		mapCreated = false;
-	Boolean		statsCreated = false;
+	private Boolean		isInit = false;
+	private Boolean		isCreatePanel = false;
+	private Boolean		mapCreated = false;
+	private Boolean		statsCreated = false;
 
-	int			selectedLoad = -1;
-	String		selectedClass = "";
+	private int			selectedLoad = -1;
+	private String		selectedClass = "";
 
 	// JLabel	label = null;
 
-	String		input = "";
-	String[]	startInputs = {"", "", ""};
+	private String		input = "";
+	private String[]	startInputs = {"", "", ""};
 
 	// TODO: add state ? (heroSelect/game)
 
@@ -299,6 +300,19 @@ public class GuiView
 		JButton keepButton = new JButton("Keep");
 		JButton leaveButton = new JButton("Leave");
 
+		this.txtArea = new JTextArea();
+		this.txtArea.setEditable(false);
+		this.txtArea.setFocusable(false);
+		this.txtArea.setLineWrap(true);
+		this.txtArea.setWrapStyleWord(true);
+		this.txtArea.setForeground(Color.WHITE);
+		Font currentFont = this.txtArea.getFont();
+		this.txtArea.setFont(new Font(currentFont.getName(), Font.BOLD, 16));
+
+		JScrollPane scrollPane = new JScrollPane(this.txtArea);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds((int)(frameW * 0.25), (int)(frameH * 0.60), (int)(frameW * 0.5), 100);
+
 		saveButton.setSize(110, 40);
 		saveButton.setLocation((int)(frameW * 0.875), (int)(frameH * 0.755));
 
@@ -391,6 +405,7 @@ public class GuiView
 		this.gamePanel.add(runButton);
 		this.gamePanel.add(keepButton);
 		this.gamePanel.add(leaveButton);
+		this.gamePanel.add(scrollPane);
 	}
 
 	public void createWindow()
@@ -499,8 +514,11 @@ public class GuiView
 		this.mapCreated = true;
 	}
 
-	public void	displayText(Object text) //TODO
+	public void	displayText(Object text)
 	{
+		this.txtArea.append(text + "\n");
+		this.txtArea.setCaretPosition(this.txtArea.getDocument().getLength());
+		this.frame.repaint();
 	}
 
 	public void displayError(String text)

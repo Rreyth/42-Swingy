@@ -25,6 +25,7 @@ public class GameController
 	private boolean				isFighting;
 	private boolean 			isLooting;
 	private boolean 			waitLoot;
+	private boolean				guiPrinted = false;
 
 	public GameController(GameModel model, GameView view)
 	{
@@ -55,7 +56,8 @@ public class GameController
 		map = MapGenerator.getInstance().newMap(playerLevel);
 		this.model.setGameMap(map);
 
-		this.view.displayText("\nGame starts");
+		if (this.view.getMode().equals("console"))
+			this.view.displayText("\nGame starts");
 		this.view.displayStats(this.model.getPlayer());
 
 		gameLoop();
@@ -157,7 +159,8 @@ public class GameController
 		while (this.isRunning)
 		{
 			this.view.displayMap(this.model.getGameMap());
-			this.view.displayText("\nWhere do you want to go?\t(North/South/East/West)(stats/save/switch/quit)");
+			if (this.view.getMode().equals("console"))
+				this.view.displayText("\nWhere do you want to go?\t(North/South/East/West)(stats/save/switch/quit)");
 			inputHandler(this.view.getInput().toLowerCase().trim());
 			if (!this.isRunning)
 				break;
@@ -178,13 +181,19 @@ public class GameController
 
 	private void	fightLoop(Villain villain)
 	{
-		this.view.displayText("You encounter a level " + villain.getLevel() + " " + villain.getName() + ".");
+		this.view.displayText("\nYou encounter a level " + villain.getLevel() + " " + villain.getName() + ".");
 		this.isFighting = true;
 		while (this.isFighting && this.isRunning)
 		{
-			this.view.displayText("\nWhat do you want to do?\t(Fight/Run)");
+			String viewMode = this.view.getMode();
+			if (viewMode.equals("console") || !this.guiPrinted)
+			{
+				this.view.displayText("\nWhat do you want to do?\t(Fight/Run)");
+				this.guiPrinted = true;
+			}
 			this.inputHandler(this.view.getInput().toLowerCase().trim());
 		}
+		this.guiPrinted = false;
 	}
 
 	private void 	lootLoop(Artifact loot, Player player)
@@ -192,9 +201,15 @@ public class GameController
 		this.waitLoot = true;
 		while (this.waitLoot)
 		{
-			this.view.displayText("\nDo you want to keep or leave it?\t(Keep/Leave)");
+			String viewMode = this.view.getMode();
+			if (viewMode.equals("console") || !this.guiPrinted)
+			{
+				this.view.displayText("\nDo you want to keep or leave it?\t(Keep/Leave)");
+				this.guiPrinted = true;
+			}
 			this.inputHandler(this.view.getInput().toLowerCase().trim());
 		}
+		this.guiPrinted = false;
 		if (this.isLooting)
 		{
 			this.view.displayText("You decided to keep it");
