@@ -183,6 +183,8 @@ public class GameController
 	{
 		this.view.displayText("\nYou encounter a level " + villain.getLevel() + " " + villain.getName() + ".");
 		this.isFighting = true;
+		this.view.changeButtonState(true, "fight");
+
 		while (this.isFighting && this.isRunning)
 		{
 			String viewMode = this.view.getMode();
@@ -199,6 +201,8 @@ public class GameController
 	private void 	lootLoop(Artifact loot, Player player)
 	{
 		this.waitLoot = true;
+		this.guiPrinted = false;
+		this.view.changeButtonState(true, "loot");
 		while (this.waitLoot)
 		{
 			String viewMode = this.view.getMode();
@@ -210,6 +214,7 @@ public class GameController
 			this.inputHandler(this.view.getInput().toLowerCase().trim());
 		}
 		this.guiPrinted = false;
+		this.view.changeButtonState(false, "loot");
 		if (this.isLooting)
 		{
 			this.view.displayText("You decided to keep it");
@@ -268,6 +273,7 @@ public class GameController
 		}
 
 		this.isFighting = false;
+		this.view.changeButtonState(false, "fight");
 
 		if (villain.getHitPoints() <= 0)
 			this.fightWin(villain, player);

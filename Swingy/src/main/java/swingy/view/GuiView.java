@@ -629,4 +629,38 @@ public class GuiView
 
 		return (ret);
 	}
+
+	public void changeButtonState(boolean enabled, String mode)
+	{
+		if (mode.equals("fight"))
+		{
+			for (Component component : this.gamePanel.getComponents())
+			{
+				if (component instanceof JButton)
+				{
+					JButton button = (JButton) component;
+					String text = button.getText();
+					if (text.equals("Fight ⚔") || text.equals("Run ⏎"))
+					{
+						button.setEnabled(enabled);
+					}
+				}
+			}
+		}
+		else if (mode.equals("loot"))
+		{
+			for (Component component : this.gamePanel.getComponents())
+			{
+				if (component instanceof JButton)
+				{
+					JButton button = (JButton) component;
+					String text = button.getText();
+					if (text.equals("Keep") || text.equals("Leave"))
+					{
+						button.setEnabled(enabled);
+					}
+				}
+			}
+		}
+	}
 }

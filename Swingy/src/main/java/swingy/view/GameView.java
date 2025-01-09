@@ -178,4 +178,10 @@ public class GameView
 		if (this.mode.equals("gui"))
 			this.guiView.updateStats(player);
 	}
+
+	public void changeButtonState(boolean enabled, String mode)
+	{
+		if (this.mode.equals("gui"))
+			this.guiView.changeButtonState(enabled, mode);
+	}
 }
