@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,12 +17,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
 
 import swingy.model.Artifact;
 import swingy.model.entity.Player;
 import swingy.model.map.GameMap;
+import swingy.model.map.Tile;
 
 public class GuiView
 {
@@ -28,11 +32,16 @@ public class GuiView
 
 	GamePanel	gamePanel;
 	JPanel		startPanel;
+	JPanel		mapPanel;
 
 	JTextArea	errorArea;
 
+	JLabel		stats;
+
 	Boolean		isInit = false;
 	Boolean		isCreatePanel = false;
+	Boolean		mapCreated = false;
+	Boolean		statsCreated = false;
 
 	int			selectedLoad = -1;
 	String		selectedClass = "";
@@ -400,6 +409,7 @@ public class GuiView
 			public void windowClosing(WindowEvent e)
 			{
 				input = "quit";
+				startInputs[0] = "quit";
 			}
 		});
 
@@ -414,10 +424,79 @@ public class GuiView
 	{
 		this.frame.dispose();
 		this.frame = null;
+		this.mapCreated = false;
+		this.statsCreated = false;
 	}
 
-	public void	displayMap(GameMap map) //TODO
+	private JPanel createMap(GameMap gameMap)
 	{
+		JPanel	visualMap;
+		JLabel	cell;
+		Font	currentFont;
+		Tile	tile;
+		String	content;
+		int		mapSize;
+		int		txtSize;
+
+		mapSize = gameMap.getSize();
+		visualMap = new JPanel(new GridLayout(mapSize, mapSize));
+
+		visualMap.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+		for (int y = 0; y < mapSize; y++)
+		{
+			for (int x = 0; x < mapSize; x++)
+			{
+				tile = gameMap.getTile(x, y);
+
+				if (tile.hasPlayer())
+					content = "P";
+				else if (tile.isOccupied()) // && tile.isVisited()
+					content = "⚔";
+				else if (tile.isVisited())
+					content = "";
+				else
+					content = "";
+
+				cell = new JLabel(content, SwingConstants.CENTER);
+				cell.setOpaque(true);
+				cell.setBackground(Color.LIGHT_GRAY);
+				cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				cell.setForeground(Color.BLACK); //TODO RM when not display mob
+
+				txtSize = (int)((500 / mapSize) * 0.85);
+				currentFont = cell.getFont();
+				cell.setFont(new Font(currentFont.getName(), Font.BOLD, txtSize));
+
+				if (tile.hasPlayer() || tile.isVisited())
+				{
+					cell.setBackground(Color.DARK_GRAY);
+					cell.setForeground(Color.WHITE);
+				}
+
+				visualMap.add(cell);
+			}
+		}
+
+		return (visualMap);
+	}
+
+	public void	displayMap(GameMap map)
+	{
+		int	frameW = this.frame.getWidth();
+		int frameH = this.frame.getHeight();
+
+		if (this.mapCreated)
+			this.gamePanel.remove(this.mapPanel);
+
+		this.mapPanel = this.createMap(map);
+		this.mapPanel.setBounds((int)(frameW * 0.5) - 250, (int)(frameH * 0.02), 500, 500);
+
+		this.gamePanel.add(this.mapPanel);
+		this.gamePanel.revalidate();
+		this.gamePanel.repaint();
+		this.frame.repaint();
+		this.mapCreated = true;
 	}
 
 	public void	displayText(Object text) //TODO
@@ -465,18 +544,21 @@ public class GuiView
 
 	public void	updateStats(Player player)
 	{
-		//TODO : real update after fight and loot
+		if (this.statsCreated)
+			this.gamePanel.remove(this.stats);
 
-		JLabel stats = new JLabel(this.formatStats(player));
+		this.stats = new JLabel(this.formatStats(player));
 
-		Font currentFont = stats.getFont();
-		stats.setFont(new Font(currentFont.getName(), currentFont.getStyle(), 20));
-		stats.setBounds(10, 0, 300, 200);
+		Font currentFont = this.stats.getFont();
+		this.stats.setFont(new Font(currentFont.getName(), currentFont.getStyle(), 20));
+		this.stats.setBounds(10, 0, 300, 200);
 
-		this.gamePanel.add(stats);
+		this.gamePanel.add(this.stats);
+		this.gamePanel.revalidate();
 		this.gamePanel.repaint();
-
 		this.frame.repaint();
+
+		this.statsCreated = true;
 	}
 
 	public void	displayLoot(Artifact loot, Player player) //TODO
