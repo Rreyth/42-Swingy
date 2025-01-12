@@ -78,7 +78,8 @@ public class GameModel
 
 	public Set<ConstraintViolation<Player>>	createPlayer(String name, String heroClass)
 	{
-		heroClass = heroClass.substring(0, 1).toUpperCase() + heroClass.substring(1);
+		if (!heroClass.isBlank())
+			heroClass = heroClass.substring(0, 1).toUpperCase() + heroClass.substring(1);
 		this.player = new Player.Builder()
 						.setName(name)
 						.setHeroClass(heroClass)

@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import swingy.model.Artifact;
 import swingy.model.entity.Player;
+import swingy.model.entity.Villain;
 import swingy.model.map.GameMap;
 
 public class GameView
@@ -183,5 +184,10 @@ public class GameView
 	{
 		if (this.mode.equals("gui"))
 			this.guiView.changeButtonState(enabled, mode);
+	}
+
+	public void guiDeathScreen(Player player, Villain villain)
+	{
+		this.guiView.displayDeath(player, villain);
 	}
 }

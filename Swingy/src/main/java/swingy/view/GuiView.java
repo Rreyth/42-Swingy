@@ -2,6 +2,7 @@ package swingy.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.DefaultFocusTraversalPolicy;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -23,6 +24,7 @@ import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
 
 import swingy.model.Artifact;
 import swingy.model.entity.Player;
+import swingy.model.entity.Villain;
 import swingy.model.map.GameMap;
 import swingy.model.map.Tile;
 
@@ -33,6 +35,7 @@ public class GuiView
 	private GamePanel	gamePanel;
 	private JPanel		startPanel;
 	private JPanel		mapPanel;
+	private JPanel		deathPanel;
 
 	private JTextArea	errorArea;
 	private JTextArea	txtArea;
@@ -412,6 +415,7 @@ public class GuiView
 		this.frame.setSize(1600, 900);
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setLayout(null);
+		this.frame.setFocusTraversalPolicy(new DefaultFocusTraversalPolicy());
 
 		this.frame.addWindowListener(new WindowAdapter()
 		{
@@ -461,7 +465,7 @@ public class GuiView
 
 				if (tile.hasPlayer())
 					content = "P";
-				else if (tile.isOccupied()) // && tile.isVisited()
+				else if (tile.isOccupied() && tile.isVisited())
 					content = "⚔";
 				else if (tile.isVisited())
 					content = "";
@@ -472,7 +476,6 @@ public class GuiView
 				cell.setOpaque(true);
 				cell.setBackground(Color.LIGHT_GRAY);
 				cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-				cell.setForeground(Color.BLACK); //TODO RM when not display mob
 
 				txtSize = (int)((500 / mapSize) * 0.85);
 				currentFont = cell.getFont();
@@ -677,5 +680,56 @@ public class GuiView
 				}
 			}
 		}
+	}
+
+	public void displayDeath(Player player, Villain villain)
+	{
+		int	frameW = this.frame.getWidth();
+		int	frameH = this.frame.getHeight();
+
+		this.deathPanel = new JPanel();
+		this.deathPanel.setBounds(0, 0, frameW, frameH);
+		this.deathPanel.setLayout(null);
+
+		JLabel title = new JLabel("BAD END");
+
+		Font currentFont = title.getFont();
+		title.setFont(new Font(currentFont.getName(), Font.BOLD, 80));
+		title.setBounds((int)(frameW / 2) - 215, 0, 425, 200);
+
+		String text = "<html>" +
+				"<table>" +
+				"<tr><td>You have lost the battle against this level " + villain.getLevel() + " " + villain.getName() + ".</td></tr>" +
+				"<tr><td>This is the end of the game for " + player.getName() + ".</td></tr>" +
+				"<tr><td>Better luck next time.</td></tr>" +
+				"<tr><td></td></tr>" +
+				"<tr><td>Save deleted.</td></tr>" +
+				"</table>" +
+				"</html>";
+
+		JLabel midText = new JLabel(text);
+
+		currentFont = midText.getFont();
+		midText.setFont(new Font(currentFont.getName(), Font.BOLD, 25));
+		midText.setBounds((int)(frameW / 2) - 375, (int)(frameH / 2) - 100, 750, 200);
+
+		JButton quitButton = new JButton("QUIT");
+
+		quitButton.setSize(150, 75);
+		quitButton.setLocation((int)(frameW * 0.5) - 75, (int)(frameH * 0.8));
+		currentFont = quitButton.getFont();
+		quitButton.setFont(new Font(currentFont.getName(), Font.BOLD, 30));
+
+		quitButton.addActionListener(e -> {
+			this.input = "quit";
+		});
+
+		this.deathPanel.add(title);
+		this.deathPanel.add(midText);
+		this.deathPanel.add(quitButton);
+
+		this.frame.remove(this.gamePanel);
+		this.frame.add(this.deathPanel);
+		this.frame.repaint();
 	}
 }

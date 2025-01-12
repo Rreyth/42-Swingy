@@ -27,6 +27,7 @@ public class GameController
 	private boolean 			waitLoot;
 	private boolean				guiPrinted = false;
 	private boolean				switched = false;
+	private boolean 			death = false;
 
 	public GameController(GameModel model, GameView view)
 	{
@@ -302,8 +303,9 @@ public class GameController
 			this.fightWin(villain, player);
 		else if (player.getHitPoints() <= 0)
 		{
+			this.death = true;
 			this.view.displayText("You have lost the battle against this level " + villain.getLevel() + " " + villain.getName() + ".\nThis is the end of the game for this hero. Better luck next time.");
-			this.loseQuit();
+			this.loseQuit(player, villain);
 		}
 	}
 
@@ -311,7 +313,12 @@ public class GameController
 	{
 		if (input.isBlank())
 			return;
-		if (input.equals("quit"))
+		if (this.death && input.equals("quit"))
+		{
+			this.view.killGui();
+			this.isRunning = false;
+		}
+		else if (input.equals("quit"))
 			quitGame();
 		else if (input.equals("switch"))
 		{
@@ -382,12 +389,14 @@ public class GameController
 		this.isRunning = false;
 	}
 
-	private void	loseQuit()
+	private void	loseQuit(Player player, Villain villain)
 	{
 		this.view.displayText("\nDeleting hero save");
 		this.model.loseQuit();
 		this.view.displayText("\nQuitting game");
-		this.view.killGui();
-		this.isRunning = false;
+		if (this.view.getMode().equals("gui"))
+			this.view.guiDeathScreen(player, villain);
+		else
+			this.isRunning = false;
 	}
 }
