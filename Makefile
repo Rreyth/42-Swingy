@@ -1,20 +1,20 @@
 all: build
 
 build:
-	mvn -f Swingy clean package
+	mvn clean package
 
 install:
-	mvn -f Swingy install
+	mvn install
 
-gui: build
-	java -jar Swingy/target/Swingy-1-jar-with-dependencies.jar gui
+gui:
+	java -jar target/Swingy-1-jar-with-dependencies.jar gui
 
-console: build
+console:
 	clear -x
-	java -jar Swingy/target/Swingy-1-jar-with-dependencies.jar console
+	java -jar target/Swingy-1-jar-with-dependencies.jar console
 
 clean:
-	mvn -f Swingy clean
+	mvn clean
 
 fclean: clean
 
