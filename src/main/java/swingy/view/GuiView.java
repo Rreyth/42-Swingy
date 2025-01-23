@@ -416,6 +416,7 @@ public class GuiView
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setLayout(null);
 		this.frame.setFocusTraversalPolicy(new DefaultFocusTraversalPolicy());
+		this.frame.setResizable(false);
 
 		this.frame.addWindowListener(new WindowAdapter()
 		{
